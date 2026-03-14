@@ -4,302 +4,931 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReachPoint — Where Reach Meets Revenue</title>
-<meta name="description" content="ReachPoint — Clipping & UGC that grows your brand 10x faster than traditional ads. 1B+ views generated for music labels, brands, streamers and more.">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<meta name="description" content="ReachPoint — Clipping & UGC that grows your brand 10x faster than traditional ads. 1B+ views generated.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Neue+Haas+Grotesk+Display+Pro:wght@400;500;700&family=Clash+Display:wght@400;500;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&f[]=clash-display@700,600,500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --orange:#FF6A00;--ol:#FFA64D;
-  --black:#060606;--card:#0D0D0D;
-  --border:rgba(255,106,0,0.15);
-  --text:rgba(255,255,255,0.85);
-  --muted:rgba(255,255,255,0.35);
+  --teal:#00FFD1;--teal2:#00C9A7;--teal3:#00A88A;
+  --bg:#020A08;--bg2:#040F0D;--card:#071A16;--card2:#0A201B;
+  --border:rgba(0,255,209,0.1);--border2:rgba(0,255,209,0.22);
+  --text:rgba(255,255,255,0.88);--muted:rgba(255,255,255,0.38);
+  --shadow-teal:rgba(0,255,209,0.18);
+  --font-body:'Space Grotesk',sans-serif;
+  --font-display:'Bebas Neue',cursive;
+  --font-ui:'Syne',sans-serif;
 }
 html{scroll-behavior:smooth}
-body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
-.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,106,0,.055) 1px,transparent 1px);background-size:36px 36px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;letter-spacing:-.01em}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:var(--teal);border-radius:2px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:var(--teal);border-radius:2px}
+
+/* ===== 3D CANVAS BACKGROUND ===== */
+#bg3d{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+.noise{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.018;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px}
+
+/* GLOW ORBS */
+.glow-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:1;filter:blur(90px)}
+.go1{width:800px;height:800px;background:radial-gradient(circle,rgba(0,255,209,.09),transparent 70%);top:-250px;left:-200px;animation:breathe 7s ease-in-out infinite}
+.go2{width:600px;height:600px;background:radial-gradient(circle,rgba(0,200,160,.07),transparent 70%);bottom:-150px;right:-100px;animation:breathe 9s ease-in-out infinite 3s}
+.go3{width:350px;height:350px;background:radial-gradient(circle,rgba(0,255,209,.05),transparent 70%);top:40%;left:45%;animation:breathe 11s ease-in-out infinite 1.5s}
+@keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ticker{to{transform:translateX(-50%)}}
+@keyframes blink2{0%,100%{opacity:1}50%{opacity:.12}}
+@keyframes twBlink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes dashPulseGlow{0%,100%{text-shadow:0 0 30px rgba(0,255,209,.5),0 0 60px rgba(0,255,209,.2)}50%{text-shadow:0 0 60px rgba(0,255,209,1),0 0 120px rgba(0,255,209,.5)}}
+@keyframes liveBarPulse{0%,100%{width:40%;opacity:.7}50%{width:90%;opacity:1}}
+@keyframes scanLine{0%{top:-2px}100%{top:100%}}
+@keyframes float3d{
+  0%{transform:rotateY(-22deg) rotateX(8deg) rotateZ(1.5deg) translateY(0) translateZ(0)}
+  25%{transform:rotateY(-18deg) rotateX(5deg) rotateZ(1deg) translateY(-14px) translateZ(20px)}
+  50%{transform:rotateY(-22deg) rotateX(9deg) rotateZ(1.5deg) translateY(-8px) translateZ(10px)}
+  75%{transform:rotateY(-19deg) rotateX(6deg) rotateZ(1.2deg) translateY(-18px) translateZ(15px)}
+  100%{transform:rotateY(-22deg) rotateX(8deg) rotateZ(1.5deg) translateY(0) translateZ(0)}
+}
+@keyframes iPhoneIntro{
+  from{opacity:0;transform:rotateY(-22deg) rotateX(8deg) rotateZ(1.5deg) translateY(60px) scale(.85)}
+  to{opacity:1;transform:rotateY(-22deg) rotateX(8deg) rotateZ(1.5deg) translateY(0) scale(1)}
+}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes badge-float-r1{
+  0%,100%{transform:perspective(600px) rotateY(-18deg) rotateX(8deg) rotateZ(-2deg) translateY(0) translateZ(30px)}
+  50%{transform:perspective(600px) rotateY(-14deg) rotateX(5deg) rotateZ(-1deg) translateY(-10px) translateZ(40px)}
+}
+@keyframes badge-float-r2{
+  0%,100%{transform:perspective(600px) rotateY(-22deg) rotateX(-6deg) rotateZ(2deg) translateY(0) translateZ(20px)}
+  50%{transform:perspective(600px) rotateY(-18deg) rotateX(-3deg) rotateZ(1deg) translateY(-8px) translateZ(30px)}
+}
+@keyframes badge-float-l1{
+  0%,100%{transform:perspective(600px) rotateY(18deg) rotateX(-8deg) rotateZ(2deg) translateY(0) translateZ(30px)}
+  50%{transform:perspective(600px) rotateY(14deg) rotateX(-5deg) rotateZ(1deg) translateY(-12px) translateZ(42px)}
+}
+@keyframes badge-float-l2{
+  0%,100%{transform:perspective(600px) rotateY(22deg) rotateX(6deg) rotateZ(-2deg) translateY(0) translateZ(20px)}
+  50%{transform:perspective(600px) rotateY(18deg) rotateX(3deg) rotateZ(-1deg) translateY(-7px) translateZ(32px)}
+}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+@keyframes titaniumSheen{0%{opacity:.3}50%{opacity:.7}100%{opacity:.3}}
+
+section{position:relative;z-index:2}
+.si2{max-width:1200px;margin:0 auto;padding:0 64px}
+.slbl{font-size:11px;color:var(--teal);letter-spacing:.22em;text-transform:uppercase;font-weight:600;margin-bottom:14px;font-family:var(--font-ui)}
+.stitle{font-family:var(--font-display);font-size:72px;line-height:.9;color:#fff;margin-bottom:20px}
+.stitle span{color:var(--teal);text-shadow:0 0 40px rgba(0,255,209,.35)}
+.ssub{font-size:16px;color:var(--muted);line-height:1.8;font-weight:300;max-width:540px;letter-spacing:-.01em}
+.btn-p{background:var(--teal);color:#020D0B;border:none;padding:16px 36px;border-radius:10px;font-family:var(--font-ui);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 32px rgba(0,255,209,.32),0 2px 0 rgba(255,255,255,.2) inset;transition:all .25s;display:inline-block;text-decoration:none}
+.btn-p:hover{background:var(--teal2);transform:translateY(-3px) scale(1.02);box-shadow:0 16px 48px rgba(0,255,209,.48)}
+.btn-s{background:transparent;color:rgba(255,255,255,.7);border:1.5px solid rgba(255,255,255,.18);padding:16px 36px;border-radius:10px;font-family:var(--font-ui);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.btn-s:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,255,209,.15)}
+.btn-campaign{background:transparent;color:#fff;border:1.5px solid rgba(255,120,30,.45);padding:16px 36px;border-radius:10px;font-family:var(--font-ui);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.btn-campaign:hover{border-color:rgba(255,120,30,.8);color:#ff7820;transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,100,20,.2)}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 64px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(6,6,6,.88);border-bottom:1px solid rgba(255,106,0,.08)}
-.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:#fff;text-decoration:none}
-.nav-brand span{color:var(--orange)}
-.nav-links{display:flex;align-items:center;gap:32px}
-.nav-links a{text-decoration:none;color:var(--muted);font-size:13px;letter-spacing:.05em;font-weight:500;transition:color .2s}
-.nav-links a:hover{color:#fff}
-.nav-cta{background:var(--orange);color:#fff;border:none;padding:11px 26px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 24px rgba(255,106,0,.38);transition:all .2s}
-.nav-cta:hover{background:#e55e00;transform:translateY(-1px)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 60px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(28px) saturate(200%);background:rgba(2,10,8,.88);border-bottom:1px solid rgba(0,255,209,.09);box-shadow:0 1px 0 rgba(0,255,209,.07),0 4px 40px rgba(0,0,0,.6)}
+.nav-brand{font-family:var(--font-display);font-size:26px;letter-spacing:.06em;color:#fff;text-decoration:none}
+.nav-brand span{color:var(--teal);text-shadow:0 0 20px rgba(0,255,209,.4)}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:13px;letter-spacing:.02em;font-weight:500;transition:all .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--teal);transform:scaleX(0);transition:transform .2s}
+.nav-links a:hover{color:#fff}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{background:var(--teal);color:#020D0B;border:none;padding:10px 22px;border-radius:8px;font-family:var(--font-ui);font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(0,255,209,.3);transition:all .2s}
+.nav-cta:hover{background:var(--teal2);transform:translateY(-1px) scale(1.02)}
 .hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:4px}
 .hamburger span{display:block;width:22px;height:2px;background:rgba(255,255,255,.7);border-radius:2px}
-.mobile-menu{display:none;position:fixed;inset:0;z-index:99;background:rgba(6,6,6,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:24px}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:99;background:rgba(2,10,8,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:24px}
 .mobile-menu.open{display:flex}
-.mobile-menu a{text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:42px;color:#fff;transition:color .2s}
-.mobile-menu a:hover{color:var(--orange)}
+.mobile-menu a{text-decoration:none;font-family:var(--font-display);font-size:42px;color:#fff;transition:color .2s}
+.mobile-menu a:hover{color:var(--teal)}
 .mobile-close{position:absolute;top:24px;right:24px;background:none;border:none;color:rgba(255,255,255,.5);font-size:28px;cursor:pointer}
 
-/* SHARED */
-section{position:relative;z-index:1}
-.si2{max-width:1200px;margin:0 auto;padding:0 64px}
-.slbl{font-size:11px;color:var(--orange);letter-spacing:.15em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
-.stitle{font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:.92;color:#fff;margin-bottom:20px}
-.stitle span{color:var(--orange)}
-.ssub{font-size:16px;color:var(--muted);line-height:1.7;font-weight:300;max-width:540px}
-.btn-p{background:var(--orange);color:#fff;border:none;padding:16px 36px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 28px rgba(255,106,0,.45);transition:all .2s;display:inline-block;text-decoration:none}
-.btn-p:hover{background:#e55e00;transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,106,0,.55)}
-.btn-s{background:transparent;color:rgba(255,255,255,.6);border:1.5px solid rgba(255,255,255,.14);padding:16px 36px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
-.btn-s:hover{border-color:var(--orange);color:var(--orange)}
-@keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes floatOrb{0%{transform:translateY(0) rotate(0deg)}25%{transform:translateY(-18px) rotate(5deg)}75%{transform:translateY(10px) rotate(-5deg)}100%{transform:translateY(0) rotate(0deg)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
-@keyframes blink2{0%,100%{opacity:1}50%{opacity:.2}}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* HERO */
-#hero{min-height:100vh;display:flex;align-items:center;padding:100px 64px 60px;overflow:hidden}
-.glow-tl{position:absolute;z-index:0;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.11) 0%,transparent 65%);top:-300px;left:-200px;filter:blur(80px);animation:breathe 5s ease-in-out infinite}
-.glow-br{position:absolute;z-index:0;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,166,77,.08) 0%,transparent 65%);bottom:-100px;right:0;filter:blur(90px);animation:breathe 7s ease-in-out infinite reverse}
-.orb{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,166,77,.36),rgba(255,106,0,.16) 50%,rgba(0,0,0,.7));border:1px solid rgba(255,106,0,.18);box-shadow:0 0 40px rgba(255,106,0,.12),inset 0 1px 0 rgba(255,255,255,.12);animation:floatOrb linear infinite;z-index:2}
-.orb::after{content:'';position:absolute;top:12%;left:18%;width:28%;height:16%;background:rgba(255,255,255,.18);border-radius:50%;filter:blur(5px)}
-.orb-1{width:110px;height:110px;top:12%;left:52%;animation-duration:6.5s;animation-delay:-1s}
-.orb-2{width:68px;height:68px;bottom:22%;left:38%;animation-duration:7.5s;animation-delay:-3s}
-.orb-3{width:44px;height:44px;top:35%;left:30%;animation-duration:5.5s;animation-delay:-2s}
-.orb-4{width:88px;height:88px;bottom:10%;left:58%;animation-duration:8s;animation-delay:-4s}
-.hero-inner{position:relative;z-index:3;display:flex;align-items:center;gap:80px;max-width:1200px;width:100%}
-.hero-left{flex:0 0 560px;display:flex;flex-direction:column;gap:26px}
-.pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,106,0,.1);border:1px solid rgba(255,106,0,.25);border-radius:100px;padding:6px 16px;width:fit-content;animation:fadeUp .5s ease both}
-.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);animation:blink2 1.8s infinite}
-.pill span{font-size:11px;color:var(--orange);letter-spacing:.1em;font-weight:600;text-transform:uppercase}
-.hero-hl{font-family:'Bebas Neue',sans-serif;font-size:130px;line-height:.88;letter-spacing:.01em;animation:fadeUp .5s .1s ease both}
-.hero-hl .w{color:#fff}.hero-hl .o{color:var(--orange)}
-.hero-tag{font-size:16px;color:var(--muted);line-height:1.7;font-weight:300;max-width:420px;animation:fadeUp .5s .18s ease both}
+/* ======== HERO ======== */
+#hero{min-height:100vh;display:flex;align-items:center;padding:100px 64px 60px;overflow:hidden;position:relative}
+#hero .hero-grid{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,255,209,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,209,.03) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,rgba(0,0,0,.4) 0%,transparent 70%)}
+#hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to bottom,transparent,var(--bg));z-index:5;pointer-events:none}
+.hero-inner{position:relative;z-index:3;display:flex;align-items:center;gap:60px;max-width:1200px;width:100%}
+.hero-left{flex:0 0 520px;display:flex;flex-direction:column;gap:28px}
+.pill{display:inline-flex;align-items:center;gap:8px;background:rgba(0,255,209,.06);border:1px solid rgba(0,255,209,.22);border-radius:100px;padding:7px 18px;width:fit-content;animation:fadeUp .5s ease both;box-shadow:0 4px 20px rgba(0,255,209,.1)}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal),0 0 20px rgba(0,255,209,.4);animation:blink2 2s infinite}
+.pill span{font-size:11px;color:var(--teal);letter-spacing:.1em;font-weight:600;text-transform:uppercase}
+.hero-hl{font-family:var(--font-display);font-size:136px;line-height:.84;letter-spacing:.01em;animation:fadeUp .5s .1s ease both}
+.hero-hl .w{color:#fff;display:block;text-shadow:0 4px 0 rgba(0,0,0,.5)}
+.hero-hl .o{color:var(--teal);display:block;text-shadow:0 0 60px rgba(0,255,209,.5),0 6px 0 rgba(0,150,100,.5)}
+.hero-tag{font-size:17px;color:var(--muted);line-height:1.78;font-weight:300;max-width:420px;animation:fadeUp .5s .18s ease both;letter-spacing:-.02em}
 .hero-ctas{display:flex;gap:12px;animation:fadeUp .5s .26s ease both;flex-wrap:wrap}
-.hero-meta{display:flex;gap:40px;animation:fadeUp .5s .34s ease both}
-.mv{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;line-height:1}
-.mv span{color:var(--orange)}
+.hero-meta{display:flex;gap:44px;animation:fadeUp .5s .34s ease both}
+.mv{font-family:var(--font-display);font-size:38px;color:#fff;line-height:1}
+.mv span{color:var(--teal);text-shadow:0 0 20px rgba(0,255,209,.4)}
 .ml{font-size:11px;color:var(--muted);letter-spacing:.06em;margin-top:2px}
-.hero-right{flex:1;display:flex;align-items:center;justify-content:center;animation:slideIn .8s .2s ease both}
-@keyframes slideIn{from{opacity:0;transform:perspective(1200px) rotateY(-8deg) rotateX(3deg) translateX(60px)}to{opacity:1;transform:perspective(1200px) rotateY(-8deg) rotateX(3deg) translateX(0)}}
-.panel{width:380px;background:var(--orange);border-radius:22px;overflow:hidden;box-shadow:0 30px 90px rgba(255,106,0,.38),0 0 0 1px rgba(255,106,0,.2);transform:perspective(1200px) rotateY(-8deg) rotateX(3deg)}
-.p-bar{background:#040404;padding:11px 18px;display:flex;align-items:center;justify-content:space-between}
-.p-dots{display:flex;gap:5px}.p-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1)}
-.p-brand{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;letter-spacing:.1em;text-transform:uppercase}
-.p-brand span{color:var(--orange)}
-.p-live{font-size:9px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:4px}
-.p-live::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 6px var(--orange);animation:blink 2s infinite}
-.p-body{padding:12px;display:flex;flex-direction:column;gap:9px}
-.lt{background:#040404;border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
-.lt-lbl{font-size:8px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.14em;margin-bottom:2px}
-.lt-val{font-family:'Bebas Neue',sans-serif;font-size:50px;color:var(--orange);line-height:1;text-shadow:0 0 30px rgba(255,106,0,.5)}
-.lt-note{font-size:8px;color:rgba(255,255,255,.18);margin-top:2px}
-.lt-r{text-align:right}.lt-rl{font-size:8px;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
-.lt-rv{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;line-height:1.25}
-.p-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.sc{background:rgba(0,0,0,.22);border-radius:10px;padding:9px 6px;text-align:center}
-.sc.black{background:#040404}
-.sc-l{font-size:7.5px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
-.sc-v{font-family:'Bebas Neue',sans-serif;font-size:19px;color:#fff;line-height:1}
-.sc-v.orange{color:var(--orange)}
-.sec-lbl{font-size:8px;color:rgba(0,0,0,.4);text-transform:uppercase;letter-spacing:.14em;font-weight:700;padding:0 1px}
-.platforms{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.plat-card{background:rgba(0,0,0,.22);border-radius:12px;padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.plat-card.black{background:#040404}
-.plat-icon{font-size:16px;color:rgba(255,255,255,.7)}
-.plat-name{font-family:'DM Sans',sans-serif;font-size:10px;color:#fff;font-weight:500}
-.plat-badge{font-size:8px;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em}
-.badge-active{background:var(--orange);color:#fff}
-.sr{display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(0,0,0,.22);border-radius:10px}
-.sp{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:rgba(0,0,0,.4);color:rgba(255,255,255,.6)}
-.si-n{font-size:9.5px;color:#fff;font-weight:500}.si-v{font-size:8px;color:rgba(255,255,255,.38);margin-top:1px}
-.si-info{flex:1}
-.badge{font-size:8px;font-weight:700;padding:3px 9px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
-.b-paid{background:#fff;color:var(--orange)}.b-pending{background:rgba(0,0,0,.35);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12)}
 
-/* TICKER */
-#ticker{padding:14px 0;background:rgba(255,106,0,.06);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;position:relative;z-index:1}
-.ticker-track{display:flex;width:max-content;animation:ticker 28s linear infinite}
-.ticker-item{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;padding:0 36px;white-space:nowrap}
-.ticker-item span{color:var(--orange)}
+/* ====== iPHONE 17 PRO 3D ====== */
+.hero-right{flex:1;display:flex;align-items:center;justify-content:center;animation:fadeUp .8s .2s ease both;position:relative;min-height:700px;perspective:1400px}
+.hero-right .iphone17-scene{position:relative;z-index:2}
+
+/* Ambient rings behind iPhone */
+.hero-right::before{
+  content:'';
+  position:absolute;
+  width:380px;height:380px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,255,209,.09) 0%,transparent 68%);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:0;
+  animation:breathe 5s ease-in-out infinite;
+}
+.hero-right::after{
+  content:'';
+  position:absolute;
+  width:500px;height:500px;
+  border-radius:50%;
+  border:1px solid rgba(0,255,209,.07);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:0;
+  animation:breathe 8s ease-in-out infinite reverse;
+}
+
+.iphone17-scene{
+  perspective:1400px;
+  perspective-origin:50% 38%;
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;
+}
+
+.iphone17-wrapper{
+  position:relative;
+  transform-style:preserve-3d;
+  animation:float3d 7s ease-in-out infinite, iPhoneIntro 1.1s cubic-bezier(.16,1,.3,1) both;
+  filter:drop-shadow(0 80px 100px rgba(0,0,0,.9)) drop-shadow(0 0 80px rgba(0,255,209,.22));
+  /* Allow pointer events to pass through to screen content */
+  pointer-events:none;
+}
+.iphone17-wrapper .ip17-screen,
+.iphone17-wrapper .iphone-content{
+  pointer-events:all;
+}
+.iphone17-wrapper:active{}
+
+/* iPhone 17 Pro body — slimmer, titanium look */
+.ip17-body{
+  position:relative;
+  width:300px;
+  height:618px;
+  border-radius:54px;
+  background:linear-gradient(170deg,
+    #2d2d30 0%,
+    #222225 15%,
+    #1a1a1c 35%,
+    #111113 55%,
+    #0e0e10 70%,
+    #141416 85%,
+    #1c1c1e 100%
+  );
+  transform-style:preserve-3d;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255,255,255,.16),
+    0 0 0 1px rgba(0,0,0,.9),
+    6px 0 24px rgba(0,0,0,.7),
+    -3px 0 14px rgba(255,255,255,.03);
+}
+
+/* Titanium frame - iPhone 17 has matte titanium */
+.ip17-frame{
+  position:absolute;
+  inset:-2.5px;
+  border-radius:56.5px;
+  background:conic-gradient(
+    from 0deg,
+    #4a4a4d 0deg,   #6e6e72 30deg,  #858588 45deg,
+    #9a9a9e 55deg,  #868689 65deg,  #5c5c60 90deg,
+    #3c3c3f 120deg, #545457 150deg, #6a6a6e 180deg,
+    #5a5a5e 210deg, #484849 240deg, #3e3e41 270deg,
+    #505053 300deg, #686869 330deg, #4a4a4d 360deg
+  );
+  z-index:-1;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.95),
+    0 40px 80px rgba(0,0,0,.85),
+    0 0 60px rgba(0,255,209,.15),
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -1px 0 rgba(0,0,0,.5);
+}
+
+/* Titanium sheen overlay */
+.ip17-frame::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:56.5px;
+  background:linear-gradient(135deg,
+    rgba(255,255,255,.18) 0%,
+    rgba(255,255,255,.06) 25%,
+    transparent 45%,
+    rgba(255,255,255,.03) 70%,
+    rgba(255,255,255,.10) 100%
+  );
+  animation:titaniumSheen 4s ease-in-out infinite;
+}
+
+/* Action button iPhone 17 style - pill shape */
+.ip17-action{
+  position:absolute;
+  left:-4px;top:108px;
+  width:4px;height:32px;
+  background:linear-gradient(to right,#3a3a3d,#4e4e52,#3a3a3d);
+  border-radius:3px 0 0 3px;
+  box-shadow:-2px 0 6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1);
+}
+.ip17-vol-up{position:absolute;left:-4px;top:152px;width:4px;height:42px;background:linear-gradient(to right,#3a3a3d,#4e4e52,#3a3a3d);border-radius:3px 0 0 3px;box-shadow:-2px 0 6px rgba(0,0,0,.6)}
+.ip17-vol-dn{position:absolute;left:-4px;top:204px;width:4px;height:42px;background:linear-gradient(to right,#3a3a3d,#4e4e52,#3a3a3d);border-radius:3px 0 0 3px;box-shadow:-2px 0 6px rgba(0,0,0,.6)}
+.ip17-power{position:absolute;right:-4px;top:168px;width:4px;height:62px;background:linear-gradient(to left,#3a3a3d,#4e4e52,#3a3a3d);border-radius:0 3px 3px 0;box-shadow:2px 0 6px rgba(0,0,0,.6)}
+
+/* Screen */
+.ip17-screen{
+  position:absolute;
+  top:12px;left:12px;right:12px;bottom:12px;
+  border-radius:44px;
+  background:#000;
+  overflow:hidden;
+  z-index:10;
+}
+
+/* iPhone 17 camera island — redesigned horizontal bar */
+.ip17-camera-bar{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:56px;
+  z-index:30;
+  display:flex;
+  align-items:flex-end;
+  padding-bottom:8px;
+  pointer-events:none;
+  background:linear-gradient(to bottom,rgba(0,0,0,.85),rgba(0,0,0,.4) 70%,transparent);
+}
+
+/* Dynamic Island — iPhone 17 has wider pill */
+.ip17-island{
+  position:absolute;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  width:100px;
+  height:30px;
+  background:#000;
+  border-radius:22px;
+  z-index:35;
+  box-shadow:0 0 0 2px rgba(0,0,0,.9),0 3px 10px rgba(0,0,0,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+}
+.ip17-island:hover{width:160px}
+.di17-cam{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 33% 33%,#1a1a30,#040408);border:1.5px solid rgba(255,255,255,.07)}
+.di17-cam::after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:rgba(80,100,255,.4);top:50%;left:50%;transform:translate(-50%,-50%)}
+.di17-face{width:4px;height:16px;border-radius:2px;background:rgba(255,255,255,.06)}
+.di17-live-dot{width:8px;height:8px;border-radius:50%;background:#ff3b30;box-shadow:0 0 8px #ff3b30;animation:blink2 1.5s infinite;opacity:0;transition:opacity .3s}
+.ip17-island:hover .di17-live-dot{opacity:1}
+
+/* iPhone 17 back camera system — triple lens with LiDAR */
+.ip17-back-camera{
+  position:absolute;
+  top:22px;right:22px;
+  width:82px;height:82px;
+  border-radius:26px;
+  background:linear-gradient(135deg,#1c1c1e,#0a0a0c);
+  border:1.5px solid rgba(255,255,255,.12);
+  box-shadow:0 4px 20px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.08);
+  z-index:-1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:4px;
+  padding:10px;
+  transform:translateZ(-2px);
+}
+.cam-lens{
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#1a1a2a,#050507);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.8),0 0 0 2px rgba(255,255,255,.04);
+  position:relative;
+}
+.cam-lens::after{content:'';position:absolute;top:20%;left:20%;width:30%;height:30%;border-radius:50%;background:rgba(100,120,255,.2)}
+.cam-lidar{border-radius:50%;background:radial-gradient(circle,#1a1a1c,#060608);border:1px solid rgba(255,165,0,.15);box-shadow:0 0 6px rgba(255,140,0,.1)}
+
+/* Screen glow beneath phone */
+.ip17-screen-glow{
+  position:absolute;
+  bottom:-40px;left:50%;
+  transform:translateX(-50%);
+  width:240px;height:40px;
+  background:radial-gradient(ellipse,rgba(0,255,209,.45),transparent 70%);
+  filter:blur(14px);
+  z-index:-1;
+  animation:breathe 3s ease-in-out infinite;
+}
+
+/* Screen reflection */
+.ip17-reflection{
+  position:absolute;
+  inset:0;
+  border-radius:44px;
+  background:linear-gradient(135deg,
+    rgba(255,255,255,.09) 0%,
+    rgba(255,255,255,.04) 28%,
+    transparent 55%
+  );
+  pointer-events:none;
+  z-index:50;
+}
+
+/* Home indicator */
+.ip17-home{
+  position:absolute;
+  bottom:8px;left:50%;
+  transform:translateX(-50%);
+  width:120px;height:5px;
+  background:rgba(255,255,255,.2);
+  border-radius:3px;
+  z-index:40;
+}
+
+/* Scroll hint on iPhone screen */
+.ip17-scroll-hint{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:42;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  pointer-events:none;
+  animation:fadeUp .5s 2s ease both, blink2 3s 2.5s ease-in-out infinite;
+  opacity:.5;
+}
+.ip17-scroll-hint-text{font-size:7px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-body)}
+.ip17-scroll-hint-arrow{width:14px;height:14px;border-right:1.5px solid rgba(255,255,255,.3);border-bottom:1.5px solid rgba(255,255,255,.3);transform:rotate(45deg);margin-top:0px}
+@keyframes scrollHide{to{opacity:0;pointer-events:none}}
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,209,.35),transparent);
+  animation:scanLine 5s linear infinite;z-index:45;pointer-events:none;
+}
+
+/* FLOATING BADGES */
+/* ====== 3D FLOATING BADGES ====== */
+@keyframes badgeFloat{
+  0%  {transform:perspective(400px) rotateX(8deg) rotateY(-6deg) translateY(0px) translateZ(0px);}
+  25% {transform:perspective(400px) rotateX(4deg) rotateY(-10deg) translateY(-10px) translateZ(12px);}
+  50% {transform:perspective(400px) rotateX(10deg) rotateY(-4deg) translateY(-6px) translateZ(8px);}
+  75% {transform:perspective(400px) rotateX(6deg) rotateY(-8deg) translateY(-12px) translateZ(14px);}
+  100%{transform:perspective(400px) rotateX(8deg) rotateY(-6deg) translateY(0px) translateZ(0px);}
+}
+@keyframes badgeFloatR{
+  0%  {transform:perspective(400px) rotateX(8deg) rotateY(6deg) translateY(0px) translateZ(0px);}
+  25% {transform:perspective(400px) rotateX(4deg) rotateY(10deg) translateY(-10px) translateZ(12px);}
+  50% {transform:perspective(400px) rotateX(10deg) rotateY(4deg) translateY(-6px) translateZ(8px);}
+  75% {transform:perspective(400px) rotateX(6deg) rotateY(8deg) translateY(-12px) translateZ(14px);}
+  100%{transform:perspective(400px) rotateX(8deg) rotateY(6deg) translateY(0px) translateZ(0px);}
+}
+@keyframes badgeGlowPulse{
+  0%,100%{opacity:.5;transform:scale(1);}
+  50%{opacity:1;transform:scale(1.15);}
+}
+@keyframes borderSpin{
+  to{transform:rotate(360deg);}
+}
+
+.iphone-badge{
+  position:absolute;
+  transform-style:preserve-3d;
+  pointer-events:none;
+  z-index:10;
+  white-space:nowrap;
+}
+
+/* 3D card face */
+.iphone-badge-inner{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px 18px;
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(10,32,27,.98) 0%,rgba(5,18,15,.98) 100%);
+  border:1px solid rgba(0,255,209,.25);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,.07) inset,
+    0 -1px 0 rgba(0,0,0,.5) inset,
+    0 16px 48px rgba(0,0,0,.85),
+    0 4px 12px rgba(0,0,0,.6),
+    0 0 30px rgba(0,255,209,.12);
+  backdrop-filter:blur(20px);
+  overflow:hidden;
+}
+
+/* Shimmer sweep */
+.iphone-badge-inner::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(105deg,
+    transparent 30%,
+    rgba(0,255,209,.06) 50%,
+    transparent 70%
+  );
+  animation:badgeShimmer 3s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes badgeShimmer{
+  0%{transform:translateX(-100%);}
+  60%,100%{transform:translateX(200%);}
+}
+
+/* Bottom glow halo */
+.iphone-badge-glow{
+  position:absolute;
+  bottom:-14px;left:50%;
+  transform:translateX(-50%);
+  width:70%;height:14px;
+  background:radial-gradient(ellipse,rgba(0,255,209,.5),transparent 70%);
+  filter:blur(6px);
+  pointer-events:none;
+  animation:badgeGlowPulse 3s ease-in-out infinite;
+}
+
+/* Spinning border accent line on top */
+.iphone-badge-inner::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,209,.7),transparent);
+  border-radius:18px 18px 0 0;
+}
+
+.badge-views{
+  top:10%;right:2%;
+  animation:badgeFloatR 6s ease-in-out infinite;
+  animation-delay:0s;
+}
+.badge-live{
+  top:35%;right:1%;
+  animation:badgeFloatR 7s ease-in-out infinite;
+  animation-delay:1.5s;
+}
+.badge-creators{
+  bottom:30%;left:1%;
+  animation:badgeFloat 6.5s ease-in-out infinite;
+  animation-delay:2.4s;
+}
+.badge-platforms{
+  bottom:8%;left:2%;
+  animation:badgeFloat 5.8s ease-in-out infinite;
+  animation-delay:.9s;
+}
+
+.badge-icon{
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;height:32px;
+  border-radius:10px;
+  background:rgba(0,255,209,.08);
+  border:1px solid rgba(0,255,209,.15);
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+}
+.badge-text{
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  z-index:1;
+}
+.badge-val{
+  font-family:var(--font-display);
+  font-size:17px;
+  color:#fff;
+  line-height:1;
+  text-shadow:0 0 16px rgba(0,255,209,.6);
+  letter-spacing:.03em;
+}
+.badge-lbl{
+  font-size:8.5px;
+  color:rgba(0,255,209,.55);
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  margin-top:3px;
+  font-weight:600;
+  font-family:var(--font-ui);
+}
+
+/* ====== DASHBOARD INSIDE PHONE ====== */
+.iphone-status{
+  position:absolute;top:0;left:0;right:0;height:54px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 22px 9px;font-size:9px;font-weight:700;
+  color:rgba(255,255,255,.85);z-index:25;
+  background:linear-gradient(to bottom,rgba(0,0,0,.85),rgba(0,0,0,.6) 60%,transparent);
+  pointer-events:none;font-family:var(--font-body);
+}
+.iphone-time{font-size:14px;font-weight:800;letter-spacing:.02em}
+.iphone-icons{display:flex;align-items:center;gap:5px}
+
+.iphone-content{
+  position:absolute;inset:0;top:0;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  scrollbar-width:thin;
+  padding-top:54px;
+  -webkit-overflow-scrolling:touch;
+  cursor:ns-resize;
+}
+.iphone-content::-webkit-scrollbar{display:block;width:2px}
+.iphone-content::-webkit-scrollbar-track{background:transparent}
+.iphone-content::-webkit-scrollbar-thumb{background:rgba(0,255,209,.3);border-radius:1px}
+/* Prevent iPhone wrapper from consuming scroll */
+.iphone-content{pointer-events:all;scrollbar-width:thin;scrollbar-color:rgba(0,255,209,.25) transparent}
+.iphone17-wrapper{pointer-events:none}
+.iphone17-wrapper .ip17-body{pointer-events:none}
+.iphone17-wrapper .ip17-screen{pointer-events:none}
+.iphone17-wrapper .iphone-content{pointer-events:all !important}
+.p-bar{background:#010A08;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07)}
+.p-dots{display:flex;gap:4px}
+.p-dot{width:7px;height:7px;border-radius:50%}
+.p-dot:nth-child(1){background:#ff5f57}.p-dot:nth-child(2){background:#febc2e}.p-dot:nth-child(3){background:#28c840}
+.p-brand{font-family:var(--font-ui);font-size:10px;font-weight:800;color:#fff;letter-spacing:.1em;text-transform:uppercase}
+.p-brand span{color:var(--teal)}
+.p-live{font-size:8px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:4px}
+.p-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:blink2 1.8s infinite}
+.p-body{padding:9px;display:flex;flex-direction:column;gap:7px;padding-bottom:28px}
+.lt{background:#010A08;border-radius:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+.lt::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,209,.3),transparent)}
+.lt-lbl{font-size:8px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;font-weight:600}
+.lt-val{font-family:var(--font-display);font-size:40px;color:var(--teal);line-height:1;text-shadow:0 0 20px rgba(0,255,209,.5);animation:dashPulseGlow 3s ease-in-out infinite}
+.lt-note{font-size:8px;color:rgba(255,255,255,.28);margin-top:1px}
+.lt-r{text-align:right}
+.lt-rl{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-weight:600}
+.lt-rv{font-family:var(--font-display);font-size:14px;color:#fff;line-height:1.4}
+.p-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.sc{background:rgba(0,255,209,.04);border-radius:7px;padding:6px 3px;text-align:center;border:1px solid rgba(0,255,209,.08)}
+.sc.dark{background:#010A08;border-color:rgba(0,255,209,.12)}
+.sc-l{font-size:7px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px;font-weight:500}
+.sc-v{font-family:var(--font-display);font-size:13px;color:#fff;line-height:1}
+.sc-v.teal{color:var(--teal);text-shadow:0 0 8px rgba(0,255,209,.3)}
+.plat-sec-lbl{font-size:8px;color:rgba(0,255,209,.6);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.platforms-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.plat-card{background:rgba(0,0,0,.4);border-radius:7px;padding:6px 3px 5px;display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid rgba(0,255,209,.08)}
+.plat-card.dark{background:#010A08;border-color:rgba(0,255,209,.14)}
+.plat-logo{width:14px;height:14px;display:flex;align-items:center;justify-content:center}
+.plat-logo svg{width:14px;height:14px}
+.plat-name{font-size:6px;color:rgba(255,255,255,.6);font-weight:600}
+.plat-badge{font-size:5px;font-weight:700;padding:1px 4px;border-radius:100px;background:rgba(0,255,209,.15);color:var(--teal);border:1px solid rgba(0,255,209,.2)}
+.live-bar-wrap{background:#010A08;border-radius:8px;padding:7px 10px;border:1px solid rgba(0,255,209,.1);position:relative;overflow:hidden}
+.live-bar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.live-bar-lbl{font-size:7px;color:rgba(0,255,209,.5);text-transform:uppercase;letter-spacing:.08em;font-weight:700;display:flex;align-items:center;gap:4px}
+.live-bar-lbl::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--teal);box-shadow:0 0 5px var(--teal);animation:blink2 1.2s infinite}
+.live-bar-val{font-family:var(--font-display);font-size:11px;color:var(--teal)}
+.live-bar-track{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.live-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),rgba(0,255,209,.4));border-radius:2px;animation:liveBarPulse 2.2s ease-in-out infinite}
+.dash-scroll-stat{background:#010A08;border-radius:8px;padding:6px 10px;border:1px solid rgba(0,255,209,.1);overflow:hidden;height:26px;position:relative}
+.dash-stat-item{display:none;align-items:center;gap:6px;height:100%}
+.dash-stat-item.show{display:flex}
+.dash-stat-dot{width:3px;height:3px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.dash-stat-txt{font-size:8px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-stat-txt span{color:var(--teal);font-weight:800}
+.sec-lbl{font-size:8px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.sr{display:flex;align-items:center;gap:7px;padding:6px 8px;background:#010A08;border-radius:7px;border:1px solid rgba(255,255,255,.07)}
+.sp{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;background:rgba(255,255,255,.08)}
+.si-n{font-size:8.5px;color:rgba(255,255,255,.9);font-weight:600}
+.si-v{font-size:7px;color:rgba(255,255,255,.35);margin-top:1px}
+.si-info{flex:1}
+.badge{font-size:7px;font-weight:700;padding:2px 6px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.b-paid{background:var(--teal);color:#020D0B}
+.b-pending{background:rgba(255,185,0,.15);color:#ffc53d;border:1px solid rgba(255,185,0,.25)}
+
+/* ====== 3D CARDS FOR SECTIONS ====== */
+.card-3d{transform-style:preserve-3d;transition:transform .4s cubic-bezier(.175,.885,.32,1.275),box-shadow .4s}
+.card-3d:hover{transform:translateY(-14px) rotateX(4deg) rotateY(-2deg);box-shadow:0 40px 80px rgba(0,0,0,.7),0 0 40px rgba(0,255,209,.12)!important}
 
 /* WHO WE SERVE */
-#who{padding:120px 0}
-.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:64px}
-.who-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 26px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;text-decoration:none;display:block}
-.who-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,106,0,.08),transparent 60%);opacity:0;transition:opacity .3s}
-.who-card:hover{border-color:rgba(255,106,0,.4);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+#who{padding:130px 0;background:var(--bg)}
+.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px}
+.who-card{background:#071A16;border:1px solid rgba(0,255,209,.1);border-radius:22px;padding:36px 30px;cursor:pointer;transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:relative;overflow:hidden;text-decoration:none;display:block;transform-style:preserve-3d}
+.who-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 25% 0%,rgba(0,255,209,.07),transparent 55%);opacity:0;transition:opacity .4s;pointer-events:none}
+.who-card:hover{transform:translateY(-14px) rotateX(5deg) rotateY(-3deg);border-color:rgba(0,255,209,.32);box-shadow:0 40px 80px rgba(0,0,0,.75),0 0 50px rgba(0,255,209,.1)}
 .who-card:hover::before{opacity:1}
-.who-card.hl{border-color:var(--orange);background:rgba(255,106,0,.04)}
-.who-emoji{font-size:36px;margin-bottom:16px;display:block}
-.who-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;margin-bottom:8px}
-.who-desc{font-size:13px;color:var(--muted);line-height:1.6}
-.who-tag{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:11px;color:var(--orange);font-weight:600;letter-spacing:.05em}
-.who-tag::after{content:'→'}
+.who-card.hl{border-color:rgba(0,255,209,.22);background:linear-gradient(145deg,rgba(0,255,209,.05),#071A16)}
+.who-icon{width:48px;height:48px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;background:rgba(0,255,209,.07);border:1px solid rgba(0,255,209,.14);border-radius:14px}
+.who-icon svg{width:24px;height:24px;fill:none;stroke:var(--teal);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.who-title{font-family:var(--font-ui);font-size:18px;font-weight:800;color:#fff;margin-bottom:10px}
+.who-desc{font-size:14px;color:rgba(255,255,255,.45);line-height:1.75;letter-spacing:-.01em}
+.who-tag{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-size:11px;color:var(--teal);font-weight:600;letter-spacing:.06em}
+.who-tag::after{content:'→';transition:transform .2s}
+.who-card:hover .who-tag::after{transform:translateX(5px)}
 
-/* CLIENTS / SOCIAL PROOF */
-#clients{padding:90px 0;border-top:1px solid var(--border);background:rgba(255,106,0,.015)}
-.clients-label{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:40px}
-.clients-row{display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap}
-.client-chip{display:flex;align-items:center;gap:12px;padding:14px 24px;background:var(--card);border:1px solid var(--border);border-radius:100px;transition:all .3s}
-.client-chip:hover{border-color:rgba(255,106,0,.35);transform:translateY(-2px)}
-.client-logo{width:32px;height:32px;border-radius:8px;object-fit:contain;background:#111;padding:2px}
-.client-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff}
-.client-sub{font-size:10px;color:var(--muted);margin-top:1px}
-/* T-Series & Coke Studio text badges since no logo available */
-.client-badge{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:11px;color:#fff;flex-shrink:0}
-.cb-red{background:linear-gradient(135deg,#e00,#c00)}.cb-pink{background:linear-gradient(135deg,#e91e8c,#9c27b0)}.cb-coke{background:linear-gradient(135deg,#f40009,#c8001e)}.cb-indi{background:linear-gradient(135deg,#FF6A00,#e55e00)}
+/* CLIENTS */
+#clients{padding:120px 0;border-top:1px solid var(--border);position:relative;overflow:hidden}
+.clients-label{text-align:center;font-size:11px;color:var(--teal);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.clients-title{text-align:center;font-family:var(--font-display);font-size:58px;color:#fff;line-height:1;margin-bottom:12px}
+.clients-title span{color:var(--teal)}
+.clients-sub{text-align:center;font-size:14px;color:var(--muted);margin-bottom:72px;font-weight:300}
+.clients-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;max-width:1100px;margin:0 auto}
+.cc{position:relative;border-radius:26px;padding:36px 28px 30px;cursor:pointer;transition:all .45s cubic-bezier(.175,.885,.32,1.275);overflow:hidden;background:var(--card);transform-style:preserve-3d}
+.cc::before{content:'';position:absolute;inset:0;border-radius:26px;opacity:0;transition:opacity .4s;pointer-events:none}
+.cc-ts{border:1px solid rgba(220,30,30,.18)}
+.cc-ts::before{background:linear-gradient(135deg,rgba(220,30,30,.09),transparent 60%)}
+.cc-ts:hover{border-color:rgba(220,30,30,.55);transform:translateY(-18px) rotateX(6deg) rotateY(-3deg) scale(1.02)}
+.cc-cs{border:1px solid rgba(240,10,20,.18)}
+.cc-cs::before{background:linear-gradient(135deg,rgba(240,10,20,.09),transparent 60%)}
+.cc-cs:hover{border-color:rgba(240,10,20,.55);transform:translateY(-18px) rotateX(6deg) rotateY(-3deg) scale(1.02)}
+.cc-er{border:1px solid rgba(200,50,220,.18)}
+.cc-er::before{background:linear-gradient(135deg,rgba(200,50,220,.09),transparent 60%)}
+.cc-er:hover{border-color:rgba(200,50,220,.55);transform:translateY(-18px) rotateX(6deg) rotateY(-3deg) scale(1.02)}
+.cc-ba{border:1px solid rgba(0,255,209,.16)}
+.cc-ba::before{background:linear-gradient(135deg,rgba(0,255,209,.07),transparent 60%)}
+.cc-ba:hover{border-color:rgba(0,255,209,.5);transform:translateY(-18px) rotateX(6deg) rotateY(-3deg) scale(1.02)}
+.cc:hover{box-shadow:0 40px 80px rgba(0,0,0,.7)}
+.cc:hover::before{opacity:1}
+.cc-logo{width:62px;height:62px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:22px;margin-bottom:20px;position:relative;flex-shrink:0}
+.logo-ts{background:linear-gradient(135deg,#ff3333,#cc0000);color:#fff}
+.logo-cs{background:linear-gradient(135deg,#ff1a1a,#990000);color:#fff}
+.logo-er{background:linear-gradient(135deg,#d63fd6,#8b1ab5);color:#fff}
+.logo-ba{background:linear-gradient(135deg,#001a14,#003326);color:var(--teal)}
+.cc-tag{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:14px;display:inline-block}
+.tag-music{background:rgba(255,51,51,.1);color:#ff7777;border:1px solid rgba(255,51,51,.18)}
+.tag-brand{background:rgba(200,50,220,.1);color:#d670d6;border:1px solid rgba(200,50,220,.18)}
+.tag-artist{background:rgba(0,255,209,.08);color:var(--teal);border:1px solid rgba(0,255,209,.18)}
+.cc-name{font-family:var(--font-ui);font-size:20px;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.1}
+.cc-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:18px;letter-spacing:-.01em}
+.cc-stat{display:flex;align-items:center;gap:8px;padding-top:16px;border-top:1px solid rgba(255,255,255,.05)}
+.cc-stat-icon{font-size:12px;opacity:.55}
+.cc-stat-text{font-size:11px;color:rgba(255,255,255,.35);font-weight:500}
+.cc-stat-val{margin-left:auto;font-family:var(--font-display);font-size:17px;color:var(--teal)}
+.clients-trust{display:flex;align-items:center;justify-content:center;gap:48px;margin-top:64px;padding-top:48px;border-top:1px solid rgba(255,255,255,.05);flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:10px}
+.trust-icon{color:var(--teal);font-size:18px}
+.trust-val{font-family:var(--font-display);font-size:24px;color:#fff;line-height:1}
+.trust-lbl{font-size:10px;color:rgba(255,255,255,.28);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
 
-/* PROOF STRIP */
+/* PROOF */
 #proof{padding:80px 0;border-top:1px solid var(--border)}
-.proof-inner{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
-.proof-text .stitle{font-size:58px}
-.proof-text p{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:24px;max-width:460px}
-.proof-cta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.proof-note{font-size:12px;color:rgba(255,255,255,.2)}
+.proof-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.proof-text p{font-size:15px;color:var(--muted);line-height:1.82;margin-bottom:24px;max-width:460px;letter-spacing:-.01em}
 .proof-cards{display:flex;flex-direction:column;gap:14px}
-.proof-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;display:flex;align-items:center;gap:16px;transition:all .3s}
-.proof-card:hover{border-color:rgba(255,106,0,.3);transform:translateX(4px)}
-.pc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(255,106,0,.1);border:1px solid rgba(255,106,0,.15)}
+.proof-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 22px;display:flex;align-items:center;gap:16px;transition:all .35s;transform-style:preserve-3d}
+.proof-card:hover{border-color:rgba(0,255,209,.25);transform:translateX(8px) rotateY(-2deg)}
+.pc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
 .pc-info{flex:1}
-.pc-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.pc-name{font-family:var(--font-ui);font-size:14px;font-weight:700;color:#fff}
 .pc-stat{font-size:12px;color:var(--muted);margin-top:2px}
-.pc-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--orange);line-height:1}
-.ticket-cta{background:rgba(255,106,0,.08);border:1px solid rgba(255,106,0,.2);border-radius:12px;padding:14px 18px;font-size:12px;color:rgba(255,255,255,.5);line-height:1.6;text-align:center}
-.ticket-cta a{color:var(--orange);text-decoration:none;font-weight:600}
-.ticket-cta a:hover{text-decoration:underline}
+.pc-val{font-family:var(--font-display);font-size:26px;color:var(--teal);line-height:1}
+.proof-discord-card{cursor:pointer}
+.discord-proof-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(88,101,242,.15);border:1px solid rgba(88,101,242,.35);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:#8b9dff;text-decoration:none;letter-spacing:.04em;transition:all .25s;white-space:nowrap;font-family:var(--font-ui);text-transform:uppercase}
+.discord-proof-btn:hover{background:rgba(88,101,242,.3);color:#fff}
+.tw-cursor{animation:twBlink 1s step-end infinite;color:var(--teal)}
 
 /* HOW IT WORKS */
-#how{padding:120px 0;background:rgba(255,106,0,.015);border-top:1px solid var(--border)}
-.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
-.step-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 30px;position:relative;overflow:hidden;transition:all .3s}
-.step-card:hover{border-color:rgba(255,106,0,.35);transform:translateY(-4px)}
-.step-num{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,106,0,.1);line-height:1;position:absolute;top:16px;right:24px}
-.step-icon{width:48px;height:48px;border-radius:12px;background:rgba(255,106,0,.12);border:1px solid rgba(255,106,0,.2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
-.step-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:10px}
-.step-desc{font-size:14px;color:var(--muted);line-height:1.65}
+#how{padding:130px 0;border-top:1px solid var(--border)}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:64px}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:38px 32px;position:relative;overflow:hidden;transition:all .4s;transform-style:preserve-3d}
+.step-card:hover{transform:translateY(-12px) rotateX(5deg);border-color:rgba(0,255,209,.25);box-shadow:0 30px 60px rgba(0,0,0,.7),0 0 30px rgba(0,255,209,.08)}
+.step-num{font-family:var(--font-display);font-size:90px;color:rgba(255,255,255,.05);line-height:1;position:absolute;top:14px;right:22px}
+.step-icon{width:50px;height:50px;border-radius:14px;background:rgba(0,255,209,.08);border:1px solid rgba(0,255,209,.16);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:22px}
+.step-title{font-family:var(--font-ui);font-size:20px;font-weight:700;color:#fff;margin-bottom:12px}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.75;letter-spacing:-.01em}
 
 /* STATS BAND */
-#stats-band{padding:80px 0;background:linear-gradient(135deg,rgba(255,106,0,.06) 0%,transparent 50%);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#stats-band{padding:80px 0;position:relative;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden}
 .stats-row{display:flex;justify-content:center;gap:80px;flex-wrap:wrap}
-.stat-item{text-align:center}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:72px;color:#fff;line-height:1}
-.stat-num span{color:var(--orange)}
-.stat-lbl{font-size:13px;color:var(--muted);letter-spacing:.06em;margin-top:6px}
+.stat-item{text-align:center;transition:all .4s;cursor:default;transform-style:preserve-3d}
+.stat-item:hover{transform:translateY(-10px) rotateX(6deg)}
+.stat-num{font-family:var(--font-display);font-size:80px;color:#fff;line-height:1}
+.stat-num span{color:var(--teal);text-shadow:0 0 40px rgba(0,255,209,.4)}
+.stat-lbl{font-size:12px;color:var(--muted);letter-spacing:.08em;margin-top:6px}
 
-/* WHY CLIPPING */
-#clipping{padding:120px 0}
+/* CLIPPING VS */
+#clipping{padding:130px 0}
 .clip-header{text-align:center;margin-bottom:80px}
 .clip-header .ssub{margin:0 auto;text-align:center}
 .clip-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:32px;align-items:start;margin-bottom:64px}
-.vs-col{display:flex;flex-direction:column;gap:12px}
-.vs-col-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:10px 16px;border-radius:8px;text-align:center;margin-bottom:4px}
+.vs-col{display:flex;flex-direction:column;gap:10px}
+.vs-col-title{font-family:var(--font-ui);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px;border-radius:10px;text-align:center;margin-bottom:6px}
 .vs-col-title.bad{background:rgba(255,255,255,.04);color:var(--muted)}
-.vs-col-title.good{background:var(--orange);color:#fff}
-.vs-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:10px;font-size:13px;line-height:1.5}
-.vs-item.bad{background:rgba(255,255,255,.03);color:rgba(255,255,255,.4)}
-.vs-item.good{background:rgba(255,106,0,.08);border:1px solid rgba(255,106,0,.15);color:var(--text)}
-.vs-ico{flex-shrink:0}.vs-item.bad .vs-ico{color:rgba(255,255,255,.2)}.vs-item.good .vs-ico{color:var(--orange)}
-.vs-divider{display:flex;align-items:center;justify-content:center;padding-top:52px}
-.vs-badge{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--orange);background:rgba(255,106,0,.1);border:1px solid rgba(255,106,0,.2);border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center}
+.vs-col-title.good{background:var(--teal);color:#020D0B}
+.vs-item{display:flex;align-items:flex-start;gap:10px;padding:13px 16px;border-radius:12px;font-size:13px;line-height:1.55;transition:all .25s}
+.vs-item.bad{background:rgba(255,255,255,.025);color:rgba(255,255,255,.38)}
+.vs-item.good{background:rgba(0,255,209,.04);border:1px solid rgba(0,255,209,.1);color:var(--text)}
+.vs-item.good:hover{background:rgba(0,255,209,.07);transform:translateX(4px)}
+.vs-ico{flex-shrink:0}.vs-item.bad .vs-ico{color:rgba(255,255,255,.18)}.vs-item.good .vs-ico{color:var(--teal)}
+.vs-divider{display:flex;align-items:center;justify-content:center;padding-top:54px}
+.vs-badge{font-family:var(--font-display);font-size:26px;color:var(--teal);background:rgba(0,255,209,.08);border:1px solid rgba(0,255,209,.2);border-radius:50%;width:58px;height:58px;display:flex;align-items:center;justify-content:center}
 .clip-types{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.clip-type{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;transition:all .3s}
-.clip-type:hover{border-color:rgba(255,106,0,.3);transform:translateY(-3px)}
-.ct-icon{font-size:30px;margin-bottom:14px}
-.ct-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
-.ct-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.clip-type{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px;transition:all .4s;transform-style:preserve-3d}
+.clip-type:hover{border-color:rgba(0,255,209,.25);transform:translateY(-10px) rotateX(4deg);box-shadow:0 30px 60px rgba(0,0,0,.6),0 0 30px rgba(0,255,209,.08)}
+.ct-icon{font-size:32px;margin-bottom:16px}
+.ct-title{font-family:var(--font-ui);font-size:16px;font-weight:700;color:#fff;margin-bottom:10px}
+.ct-desc{font-size:14px;color:var(--muted);line-height:1.72;letter-spacing:-.01em}
 
 /* FOR BRANDS */
-#brands{padding:120px 0;border-top:1px solid var(--border)}
-.brands-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px}
-.brand-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px;transition:all .3s}
-.brand-card:hover{border-color:rgba(255,106,0,.35);transform:translateY(-4px)}
-.brand-card.featured{background:var(--orange);border-color:var(--orange)}
-.brand-card.featured .bc-title,.brand-card.featured .bc-desc{color:rgba(255,255,255,.9)}
-.brand-card.featured .bc-icon{background:rgba(0,0,0,.2);border-color:rgba(0,0,0,.1)}
-.bc-icon{width:48px;height:48px;border-radius:12px;background:rgba(255,106,0,.12);border:1px solid rgba(255,106,0,.2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
-.bc-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:10px}
-.bc-desc{font-size:13px;color:var(--muted);line-height:1.65}
+#brands{padding:130px 0;border-top:1px solid var(--border)}
+.brands-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:64px}
+.brand-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:32px;transition:all .4s;position:relative;transform-style:preserve-3d}
+.brand-card:hover{border-color:rgba(0,255,209,.25);transform:translateY(-12px) rotateX(5deg) rotateY(-2deg);box-shadow:0 40px 70px rgba(0,0,0,.7)}
+.brand-card.featured{background:linear-gradient(145deg,rgba(0,255,209,.06),rgba(4,12,10,.95));border-color:rgba(0,255,209,.22)}
+.bc-icon{width:50px;height:50px;border-radius:14px;background:rgba(0,255,209,.08);border:1px solid rgba(0,255,209,.14);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.bc-title{font-family:var(--font-ui);font-size:18px;font-weight:700;color:#fff;margin-bottom:10px}
+.bc-desc{font-size:14px;color:var(--muted);line-height:1.72;letter-spacing:-.01em}
 
 /* FAQ */
-#faq{padding:120px 0;border-top:1px solid var(--border);background:rgba(255,106,0,.015)}
+#faq{padding:130px 0;border-top:1px solid var(--border)}
 .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:64px}
-.faq-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;cursor:pointer;transition:all .3s}
-.faq-item.open{border-color:rgba(255,106,0,.3)}
-.faq-q{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.faq-icon{color:var(--orange);font-size:20px;flex-shrink:0;transition:transform .3s;line-height:1}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;cursor:pointer;transition:all .35s;transform-style:preserve-3d}
+.faq-item:hover,.faq-item.open{border-color:rgba(0,255,209,.22)}
+.faq-item:hover{transform:translateY(-4px) rotateX(2deg)}
+.faq-item.open{background:linear-gradient(145deg,rgba(0,255,209,.04),var(--card))}
+.faq-q{font-family:var(--font-ui);font-size:15px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-icon{color:var(--teal);font-size:20px;flex-shrink:0;transition:transform .3s;line-height:1}
 .faq-item.open .faq-icon{transform:rotate(45deg)}
-.faq-a{font-size:13px;color:var(--muted);line-height:1.7;margin-top:14px;display:none}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.8;margin-top:16px;display:none;letter-spacing:-.01em}
 .faq-item.open .faq-a{display:block}
 
-/* SCHEDULE A CALL */
-#book{padding:100px 0 140px;position:relative;overflow:hidden}
-.book-glow{position:absolute;z-index:0;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.13) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(80px)}
-.book-inner{position:relative;z-index:1;background:var(--card);border:1px solid rgba(255,106,0,.2);border-radius:32px;padding:64px;max-width:940px;margin:0 auto;box-shadow:0 40px 100px rgba(0,0,0,.6);display:flex;gap:60px;align-items:flex-start}
-.book-left{flex:1}
-.book-left .stitle{font-size:52px;margin-bottom:16px}
-.book-left p{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:28px}
-.book-points{display:flex;flex-direction:column;gap:12px}
-.book-point{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text)}
-.book-point::before{content:'→';color:var(--orange);font-weight:700}
-.book-right{flex:0 0 320px}
-.book-form{display:flex;flex-direction:column;gap:14px}
-.fg{display:flex;flex-direction:column;gap:6px}
-.fg label{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:600}
-.fg input,.fg select{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 16px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s;outline:none;width:100%;-webkit-appearance:none;appearance:none}
-.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer}
-.fg input::placeholder{color:rgba(255,255,255,.2)}
-.fg input:focus,.fg select:focus{border-color:rgba(255,106,0,.5);background:rgba(255,106,0,.04)}
-.fg select option{background:#1a1a1a;color:#fff}
-.submit-btn{background:var(--orange);color:#fff;border:none;padding:16px;border-radius:10px;width:100%;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 28px rgba(255,106,0,.4);transition:all .2s;margin-top:4px}
-.submit-btn:hover{background:#e55e00;transform:translateY(-2px)}
-.form-note{font-size:11px;color:rgba(255,255,255,.2);text-align:center;margin-top:4px}
-.success-msg{display:none;text-align:center;padding:40px 0}
-.success-icon{font-size:48px;margin-bottom:16px}
-.success-title{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--orange);margin-bottom:10px}
-.success-sub{font-size:14px;color:var(--muted);line-height:1.6}
+/* BOOK */
+#book{padding:140px 0 170px;position:relative;overflow:hidden}
+.book-glow{position:absolute;z-index:0;inset:0;pointer-events:none}
+.book-glow::before{content:'';position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,209,.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(100px)}
+.book-label{text-align:center;font-size:10px;color:var(--teal);letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:16px}
+.book-headline{text-align:center;font-family:var(--font-display);font-size:84px;line-height:.88;color:#fff;margin-bottom:64px}
+.book-headline span{color:var(--teal);text-shadow:0 0 60px rgba(0,255,209,.4)}
+.tabs-header{display:flex;gap:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:5px;max-width:520px;margin:0 auto 56px}
+.tab-btn{flex:1;padding:13px 20px;border-radius:10px;border:none;background:transparent;font-family:var(--font-ui);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:rgba(255,255,255,.4);transition:all .3s}
+.tab-btn.active{background:var(--card);color:#fff}
+.tab-btn.active.tab-call{color:var(--teal)}
+.tab-btn.active.tab-campaign{color:#ff8030}
+.tab-btn-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:7px;vertical-align:middle}
+.tab-btn.tab-call .tab-btn-dot{background:var(--teal)}
+.tab-btn.tab-campaign .tab-btn-dot{background:#ff8030}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.book-card-wrap{position:relative;max-width:1080px;margin:0 auto;border-radius:34px;padding:1.5px;background:linear-gradient(135deg,rgba(0,255,209,.55) 0%,rgba(0,255,209,.1) 30%,transparent 55%,rgba(0,255,209,.06) 80%,rgba(0,255,209,.35) 100%)}
+.book-card{position:relative;z-index:1;border-radius:33px;overflow:hidden;display:flex;min-height:590px;background:#030D0B}
+.bk-left{flex:0 0 420px;padding:56px 50px;background:linear-gradient(148deg,rgba(0,255,209,.045) 0%,rgba(0,0,0,0) 55%);position:relative;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid rgba(0,255,209,.1)}
+.bk-left::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),rgba(0,255,209,.25),transparent)}
+.bk-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:26px}
+.bk-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal);animation:blink2 2s infinite}
+.bk-eyebrow-txt{font-size:10px;color:var(--teal);letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+.bk-title{font-family:var(--font-display);font-size:56px;line-height:.88;color:#fff;margin-bottom:14px}
+.bk-title span{color:var(--teal)}
+.bk-sub{font-size:13.5px;color:rgba(255,255,255,.38);line-height:1.8;margin-bottom:36px;max-width:320px}
+.bk-points{display:flex;flex-direction:column;gap:0;margin-bottom:36px}
+.bk-pt{display:flex;gap:14px;align-items:flex-start;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.bk-pt:first-child{padding-top:0}.bk-pt:last-child{border-bottom:none;padding-bottom:0}
+.bk-pt-icon{width:34px;height:34px;min-width:34px;border-radius:9px;background:rgba(0,255,209,.06);border:1px solid rgba(0,255,209,.14);display:flex;align-items:center;justify-content:center;font-size:15px}
+.bk-pt-title{font-family:var(--font-ui);font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
+.bk-pt-desc{font-size:11px;color:rgba(255,255,255,.3);line-height:1.55}
+.bk-proof{display:flex;align-items:center;gap:14px;padding:17px 18px;background:rgba(0,255,209,.05);border:1px solid rgba(0,255,209,.12);border-radius:16px}
+.bk-proof-avs{display:flex}
+.bk-av{width:30px;height:30px;border-radius:50%;border:2px solid #030D0B;font-size:10px;font-weight:700;color:#020D0B;display:flex;align-items:center;justify-content:center;margin-left:-9px;flex-shrink:0}
+.bk-av:first-child{margin-left:0}
+.bk-av-ts{background:linear-gradient(135deg,#FF3333,#990000)}
+.bk-av-cs{background:linear-gradient(135deg,#E8001A,#6B0000)}
+.bk-av-er{background:linear-gradient(135deg,#C939D4,#6200A3)}
+.bk-av-ba{background:linear-gradient(135deg,#00FFD1,#007A5E)}
+.bk-proof-title{font-size:12px;color:#fff;font-weight:600;line-height:1.3}
+.bk-proof-sub{font-size:10px;color:rgba(255,255,255,.28);margin-top:2px}
+.bk-stars{color:#FFD700;font-size:12px;letter-spacing:1px}
+.bk-right{flex:1;padding:52px 46px;background:rgba(0,0,0,.15);display:flex;flex-direction:column;justify-content:center}
+.bk-form-title{font-family:var(--font-ui);font-size:15px;font-weight:800;color:#fff;margin-bottom:26px}
+.bk-form-title span{color:var(--teal)}
+.bkf{display:flex;flex-direction:column;gap:13px}
+.fg{display:flex;flex-direction:column;gap:6px;position:relative}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg label{font-size:10px;color:rgba(0,255,209,.5);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:11px;padding:13px 15px;color:#fff;font-family:var(--font-body);font-size:13.5px;transition:all .22s;outline:none;width:100%;-webkit-appearance:none;appearance:none}
+.fg textarea{resize:vertical;min-height:76px;line-height:1.55}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2300FFD1' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;cursor:pointer}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,.13)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(0,255,209,.32);background:rgba(0,255,209,.025)}
+.fg select option{background:#071A16;color:#fff}
+.submit-btn{position:relative;overflow:hidden;background:var(--teal);color:#020D0B;border:none;padding:17px;border-radius:12px;width:100%;font-family:var(--font-ui);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;margin-top:4px}
+.submit-btn:hover{transform:translateY(-3px) scale(1.01)}
+.form-note{font-size:10px;color:rgba(255,255,255,.18);text-align:center;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+.success-msg{text-align:center;padding:50px 20px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.success-icon{font-size:60px;animation:fadeUp .4s ease}
+.success-title{font-family:var(--font-display);font-size:50px;color:var(--teal);line-height:1;animation:fadeUp .4s .1s ease both}
+.success-sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:280px;animation:fadeUp .4s .2s ease both}
+.camp-card-wrap{position:relative;max-width:1080px;margin:0 auto;border-radius:34px;padding:1.5px;background:linear-gradient(135deg,rgba(255,120,30,.45) 0%,rgba(255,80,10,.1) 30%,transparent 55%,rgba(255,100,20,.06) 80%,rgba(255,120,30,.28) 100%)}
+.camp-card{position:relative;z-index:1;border-radius:33px;overflow:hidden;display:flex;min-height:590px;background:#030D0B}
+.cp-left{flex:0 0 400px;padding:48px 40px;background:linear-gradient(148deg,rgba(255,100,20,.045) 0%,transparent 55%);position:relative;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid rgba(255,100,20,.1)}
+.cp-left::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ff8030,rgba(255,120,30,.25),transparent)}
+.cp-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px}
+.cp-dot{width:7px;height:7px;border-radius:50%;background:#ff8030;animation:blink2 2s infinite}
+.cp-eyebrow-txt{font-size:10px;color:#ff8030;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+.cp-title{font-family:var(--font-display);font-size:48px;line-height:.88;color:#fff;margin-bottom:12px}
+.cp-title span{color:#ff8030}
+.cp-sub{font-size:13px;color:rgba(255,255,255,.38);line-height:1.8;margin-bottom:28px;max-width:320px}
+.cp-points{display:flex;flex-direction:column;gap:0;margin-bottom:24px}
+.cp-pt{display:flex;gap:14px;align-items:flex-start;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cp-pt:first-child{padding-top:0}.cp-pt:last-child{border-bottom:none;padding-bottom:0}
+.cp-pt-icon{width:32px;height:32px;min-width:32px;border-radius:9px;background:rgba(255,100,20,.07);border:1px solid rgba(255,100,20,.18);display:flex;align-items:center;justify-content:center;font-size:14px}
+.cp-pt-title{font-family:var(--font-ui);font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
+.cp-pt-desc{font-size:11px;color:rgba(255,255,255,.3);line-height:1.55}
+.cp-platforms{margin-top:4px}
+.cp-plat-lbl{font-size:9px;color:rgba(255,120,30,.6);letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.cp-plat-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cp-plat-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;transition:all .25s}
+.cp-plat-icon svg{width:17px;height:17px}
+.cp-right{flex:1;padding:48px 42px;background:rgba(0,0,0,.15);display:flex;flex-direction:column;justify-content:center}
+.cp-form-title{font-family:var(--font-ui);font-size:15px;font-weight:800;color:#fff;margin-bottom:22px}
+.cp-form-title span{color:#ff8030}
+.submit-btn-campaign{position:relative;overflow:hidden;background:linear-gradient(135deg,#ff7020,#e05010);color:#fff;border:none;padding:17px;border-radius:12px;width:100%;font-family:var(--font-ui);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;margin-top:4px}
+.submit-btn-campaign:hover{transform:translateY(-3px) scale(1.01)}
+.budget-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.bp{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .22s;font-family:var(--font-body)}
+.bp:hover,.bp.sel{background:rgba(255,100,20,.1);border-color:rgba(255,100,20,.4);color:#ff8030}
+.platform-checks{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.pchk{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:7px 12px;cursor:pointer;transition:all .22s;user-select:none}
+.pchk:hover,.pchk.sel{background:rgba(0,255,209,.06);border-color:rgba(0,255,209,.25);color:var(--teal)}
+.pchk-box{width:14px;height:14px;border-radius:4px;border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;transition:all .22s;flex-shrink:0}
+.pchk.sel .pchk-box{background:var(--teal);border-color:var(--teal)}
+.pchk-box-inner{width:8px;height:8px;background:#020D0B;border-radius:2px;opacity:0;transition:opacity .2s}
+.pchk.sel .pchk-box-inner{opacity:1}
+.pchk-label{font-size:12px;color:rgba(255,255,255,.55);font-weight:500;transition:color .22s}
+.pchk.sel .pchk-label{color:var(--teal)}
+.optional-tag{font-size:9px;color:rgba(255,255,255,.2);font-weight:400;text-transform:none;letter-spacing:0}
 
+/* TICKER */
+#ticker{padding:14px 0;background:rgba(0,255,209,.03);border-top:1px solid rgba(0,255,209,.08);border-bottom:1px solid rgba(0,255,209,.08);overflow:hidden;position:relative;z-index:2}
+.ticker-track{display:flex;width:max-content;animation:ticker 32s linear infinite}
+.ticker-item{font-family:var(--font-ui);font-size:11px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.12em;text-transform:uppercase;padding:0 36px;white-space:nowrap}
+.ticker-item span{color:var(--teal);text-shadow:0 0 10px rgba(0,255,209,.3)}
 
 /* FOOTER */
-footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px;position:relative;z-index:1}
+footer{background:#010907;border-top:1px solid var(--border);padding:60px 0 40px;position:relative;z-index:2}
 .footer-inner{max-width:1200px;margin:0 auto;padding:0 64px;display:flex;justify-content:space-between;align-items:flex-start;gap:40px}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;letter-spacing:.04em}
-.footer-logo span{color:var(--orange)}
-.footer-tagline{font-size:13px;color:var(--muted);margin-top:6px;max-width:220px;line-height:1.6}
+.footer-logo{font-family:var(--font-display);font-size:32px;color:#fff;letter-spacing:.04em}
+.footer-logo span{color:var(--teal)}
+.footer-tagline{font-size:13px;color:var(--muted);margin-top:6px;max-width:220px;line-height:1.65}
 .footer-contact{margin-top:18px;display:flex;flex-direction:column;gap:6px}
-.footer-contact a{text-decoration:none;font-size:12px;color:rgba(255,106,0,.6);transition:color .2s}
-.footer-contact a:hover{color:var(--orange)}
+.footer-contact a{text-decoration:none;font-size:12px;color:rgba(255,255,255,.4);transition:color .2s}
+.footer-contact a:hover{color:var(--teal)}
 .footer-links{display:flex;gap:60px}
-.fc-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.fc-title{font-family:var(--font-ui);font-size:11px;font-weight:700;color:#fff;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
 .footer-col a{display:block;text-decoration:none;font-size:13px;color:var(--muted);margin-bottom:10px;transition:color .2s}
 .footer-col a:hover{color:#fff}
 .footer-bottom{max-width:1200px;margin:40px auto 0;padding:20px 64px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;align-items:center}
-.footer-copy{font-size:12px;color:rgba(255,255,255,.15)}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.14)}
 .footer-social{display:flex;gap:12px}
-.social-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--muted);transition:all .2s}
-.social-btn:hover{background:rgba(255,106,0,.1);border-color:rgba(255,106,0,.25);color:var(--orange)}
+.social-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--muted);transition:all .25s}
+.social-btn:hover{background:rgba(0,255,209,.08);border-color:rgba(0,255,209,.22);color:var(--teal);transform:translateY(-2px)}
 .social-btn svg{width:15px;height:15px;fill:currentColor}
+
+/* 3D FLOATING PARTICLES */
+.particle-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;border-radius:50%;background:var(--teal);pointer-events:none}
 
 /* RESPONSIVE */
 @media(max-width:1100px){
-  nav{padding:16px 24px}.nav-links,.nav-cta{display:none}.hamburger{display:flex}
-  #hero{padding:90px 24px 50px}.hero-inner{flex-direction:column;gap:40px}.hero-left{flex:unset;width:100%}.hero-hl{font-size:76px}.hero-right{width:100%}
-  .panel{transform:none;width:100%;max-width:400px}
-  .si2{padding:0 24px}
-  .stitle{font-size:50px}
-  .who-grid,.steps-grid,.clip-types,.brands-grid,.faq-grid,.proof-inner{grid-template-columns:1fr}
+  nav{padding:14px 20px}.nav-links,.nav-cta{display:none}.hamburger{display:flex}
+  #hero{padding:90px 20px 50px}.hero-inner{flex-direction:column;gap:40px}.hero-left{flex:unset;width:100%}.hero-hl{font-size:80px}
+  .hero-right{width:100%;min-height:560px}
+  .iphone-badge{display:none}
+  .si2{padding:0 20px}.stitle{font-size:50px}
+  .who-grid,.steps-grid,.brands-grid,.faq-grid,.proof-inner,.clients-grid{grid-template-columns:1fr 1fr}
   .clip-vs{grid-template-columns:1fr}.vs-divider{display:none}
-  .book-inner{flex-direction:column;padding:36px 24px}.book-right{width:100%;flex:unset}.book-left .stitle{font-size:42px}
-  .stats-row{gap:32px}.clients-row{gap:20px}
-  .footer-inner{flex-direction:column}.footer-links{gap:28px;flex-wrap:wrap}
-  .footer-bottom{padding:20px 24px 0;flex-direction:column;gap:14px;text-align:center}
-  }
+  .book-card,.camp-card{flex-direction:column}
+  .bk-left{flex:unset;border-right:none;border-bottom:1px solid rgba(0,255,209,.1);padding:36px 20px}.bk-right{padding:30px 20px}
+  .cp-left{flex:unset;border-right:none;border-bottom:1px solid rgba(255,100,20,.1);padding:36px 20px}.cp-right{padding:30px 20px}
+  .book-headline{font-size:52px}.fg2{grid-template-columns:1fr}
+  .stats-row{gap:32px}.footer-inner{flex-direction:column}.footer-links{gap:28px;flex-wrap:wrap}
+  .footer-bottom{padding:20px 20px 0;flex-direction:column;gap:14px;text-align:center}
+  .clip-types{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .clients-grid{grid-template-columns:1fr}.who-grid,.steps-grid,.brands-grid,.faq-grid{grid-template-columns:1fr}.clip-types{grid-template-columns:1fr}
+  .iphone17-wrapper{transform:rotateY(-10deg) rotateX(5deg) scale(.82)!important}
+}
 </style>
 </head>
 <body>
-<div class="grid-bg"></div>
 
-<!-- MOBILE MENU -->
+<!-- THREE.JS 3D BACKGROUND -->
+<canvas id="bg3d"></canvas>
+<div class="noise"></div>
+<div class="glow-orb go1"></div>
+<div class="glow-orb go2"></div>
+<div class="glow-orb go3"></div>
+
 <div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <button class="mobile-close" onclick="toggleMenu()">&#x2715;</button>
   <a href="#who" onclick="toggleMenu()">Who We Serve</a>
   <a href="#clients" onclick="toggleMenu()">Clients</a>
   <a href="#how" onclick="toggleMenu()">How It Works</a>
@@ -308,8 +937,6 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
   <a href="#book" onclick="toggleMenu()">Schedule a Call</a>
 </div>
 
-
-<!-- NAV -->
 <nav>
   <a class="nav-brand" href="#">REACH<span>POINT</span></a>
   <div class="nav-links">
@@ -320,64 +947,204 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
     <a href="#faq">FAQ</a>
   </div>
   <button class="nav-cta" onclick="scrollToBook()">Schedule a Call</button>
+  <button class="nav-cta" style="background:transparent;color:#ff8030;border:1.5px solid rgba(255,120,30,.4);margin-left:8px" onclick="scrollToCampaign()">Start a Campaign</button>
   <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="glow-tl"></div><div class="glow-br"></div>
-  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div><div class="orb orb-4"></div>
+  <div class="hero-grid"></div>
+
   <div class="hero-inner">
     <div class="hero-left">
-
-      <div class="hero-hl"><span class="w">REACH</span><br><span class="o">POINT</span></div>
-      <p class="hero-tag">Clipping &amp; UGC that grows your brand 10x faster than traditional ads. Real creators. Organic reach. Unstoppable growth.</p>
+      <div class="pill"><div class="pill-dot"></div><span>1B+ Views Delivered for Brands</span></div>
+      <div class="hero-hl">
+        <span class="w">REACH</span>
+        <span class="o">POINT</span>
+      </div>
+      <p class="hero-tag">Organic reach at scale. We deploy 2000+ creators across 5 platforms to make your brand go viral — faster and cheaper than any paid ad.</p>
       <div class="hero-ctas">
-        <a href="https://discord.gg/akgUVZRAwb" target="_blank" class="btn-p">Join as a Clipper</a>
-        <button class="btn-s" onclick="scrollToBook()">I'm a Brand</button>
+        <a href="https://discord.gg/akgUVZRAwb" target="_blank" class="btn-p">Join as a Creator</a>
+        <button class="btn-s" onclick="scrollToBook()">Schedule a Call</button>
+        <button class="btn-campaign" onclick="scrollToCampaign()">Start a Campaign ⚡</button>
       </div>
       <div class="hero-meta">
         <div><div class="mv"><span>10x</span></div><div class="ml">vs Traditional Ads</div></div>
         <div><div class="mv"><span>5</span></div><div class="ml">Platforms</div></div>
       </div>
     </div>
+
+    <!-- iPHONE 17 PRO 3D -->
     <div class="hero-right">
-      <div class="panel">
-        <div class="p-bar">
-          <div class="p-dots"><div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div></div>
-          <div class="p-brand">REACH<span>POINT</span></div>
-          <div class="p-live">Live</div>
+      <!-- Floating stat badges — positioned relative to hero-right, NOT the 3D wrapper -->
+      <div class="iphone-badge badge-views">
+        <div class="iphone-badge-inner">
+          <span class="badge-icon">📈</span>
+          <div class="badge-text"><span class="badge-val">1B+</span><span class="badge-lbl">Views Generated</span></div>
         </div>
-        <div class="p-body">
-          <div class="lt">
-            <div>
-              <div class="lt-lbl">Total Views Generated</div>
-              <div class="lt-val" id="counterVal">0B+</div>
-              <div class="lt-note">Organic · all platforms</div>
+        <div class="iphone-badge-glow"></div>
+      </div>
+      <div class="iphone-badge badge-live">
+        <div class="iphone-badge-inner">
+          <span class="badge-icon">🔴</span>
+          <div class="badge-text"><span class="badge-val" id="liveViewerCount">3.1M/hr</span><span class="badge-lbl">Views Live Now</span></div>
+        </div>
+        <div class="iphone-badge-glow"></div>
+      </div>
+      <div class="iphone-badge badge-creators">
+        <div class="iphone-badge-inner">
+          <span class="badge-icon">👥</span>
+          <div class="badge-text"><span class="badge-val">2000+</span><span class="badge-lbl">Active Creators</span></div>
+        </div>
+        <div class="iphone-badge-glow"></div>
+      </div>
+      <div class="iphone-badge badge-platforms">
+        <div class="iphone-badge-inner">
+          <span class="badge-icon">⚡</span>
+          <div class="badge-text"><span class="badge-val">24 HRS</span><span class="badge-lbl">To Go Live</span></div>
+        </div>
+        <div class="iphone-badge-glow"></div>
+      </div>
+
+      <div class="iphone17-scene">
+        <div class="iphone17-wrapper" id="iphoneWrapper">
+
+          <!-- iPhone 17 Pro physical body -->
+          <div class="ip17-body">
+            <!-- Titanium rim -->
+            <div class="ip17-frame"></div>
+
+            <!-- Side buttons -->
+            <div class="ip17-action"></div>
+            <div class="ip17-vol-up"></div>
+            <div class="ip17-vol-dn"></div>
+            <div class="ip17-power"></div>
+
+            <!-- Back camera (visible on 3D rotation) -->
+            <div class="ip17-back-camera">
+              <div class="cam-lens"></div>
+              <div class="cam-lens"></div>
+              <div class="cam-lens"></div>
+              <div class="cam-lidar"></div>
             </div>
-            <div class="lt-r">
-              <div class="lt-rl">Services</div>
-              <div class="lt-rv"><span id="tw-services"></span></div>
+
+            <!-- Screen -->
+            <div class="ip17-screen">
+              <!-- Status bar -->
+              <div class="iphone-status">
+                <span class="iphone-time">9:41</span>
+                <div class="iphone-icons">
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="rgba(255,255,255,.85)"><rect x="0" y="3" width="3" height="7" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/><rect x="12" y="0" width="2" height="10" rx="1" opacity=".3"/></svg>
+                  <svg width="12" height="10" viewBox="0 0 12 10" fill="rgba(255,255,255,.85)"><path d="M6 2C3.8 2 1.8 3 0.5 4.5L2 6C2.9 5 4.4 4.3 6 4.3s3.1.7 4 1.7L11.5 4.5C10.2 3 8.2 2 6 2z"/></svg>
+                  <svg width="22" height="10" viewBox="0 0 22 10" fill="none"><rect x=".5" y=".5" width="18" height="9" rx="2.5" stroke="rgba(255,255,255,.4)"/><rect x="2" y="2" width="14" height="6" rx="1.5" fill="rgba(255,255,255,.8)"/><path d="M20 3.5v3a1.5 1.5 0 0 0 0-3z" fill="rgba(255,255,255,.4)"/></svg>
+                </div>
+              </div>
+
+              <!-- Dynamic Island -->
+              <div class="ip17-island">
+                <div class="di17-cam"></div>
+                <div class="di17-face"></div>
+                <div class="di17-live-dot"></div>
+              </div>
+
+              <!-- Dashboard content -->
+              <div class="iphone-content">
+                <div class="p-bar">
+                  <div class="p-dots"><div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div></div>
+                  <div class="p-brand">REACH<span>POINT</span></div>
+                  <div class="p-live">Live</div>
+                </div>
+                <div class="p-body">
+                  <div class="lt">
+                    <div>
+                      <div class="lt-lbl">Total Views Generated</div>
+                      <div class="lt-val" id="counterVal">0B+</div>
+                      <div class="lt-note">Organic · all platforms</div>
+                    </div>
+                    <div class="lt-r">
+                      <div class="lt-rl">Services</div>
+                      <div class="lt-rv">Clips&nbsp;&nbsp;UGC</div>
+                    </div>
+                  </div>
+                  <div class="p-stats">
+                    <div class="sc dark"><div class="sc-l">Clipping</div><div class="sc-v teal">✓</div></div>
+                    <div class="sc"><div class="sc-l">UGC</div><div class="sc-v">✓</div></div>
+                    <div class="sc"><div class="sc-l">Logos</div><div class="sc-v">✓</div></div>
+                    <div class="sc"><div class="sc-l">Growth</div><div class="sc-v teal">10x</div></div>
+                  </div>
+                  <div class="plat-sec-lbl">Platforms</div>
+                  <div class="platforms-grid">
+                    <div class="plat-card dark"><div class="plat-logo"><svg viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.22 8.22 0 0 0 4.82 1.55V6.79a4.85 4.85 0 0 1-1.05-.1z"/></svg></div><div class="plat-name">TikTok</div><div class="plat-badge">Active</div></div>
+                    <div class="plat-card"><div class="plat-logo"><svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="plat-name">YouTube</div><div class="plat-badge">Active</div></div>
+                    <div class="plat-card"><div class="plat-logo"><svg viewBox="0 0 24 24"><defs><linearGradient id="igG" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFDC80"/><stop offset="50%" stop-color="#F77737"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs><path fill="url(#igG)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div><div class="plat-name">Instagram</div><div class="plat-badge">Active</div></div>
+                    <div class="plat-card"><div class="plat-logo"><svg viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.735-8.835L1.254 2.25H8.08l4.259 5.632L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div><div class="plat-name">X</div><div class="plat-badge">Active</div></div>
+                    <div class="plat-card"><div class="plat-logo"><svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div><div class="plat-name">Facebook</div><div class="plat-badge">Active</div></div>
+                  </div>
+                  <div class="live-bar-wrap">
+                    <div class="live-bar-header">
+                      <div class="live-bar-lbl">Views/hr Generating</div>
+                      <div class="live-bar-val" id="liveBarCount">2.4M</div>
+                    </div>
+                    <div class="live-bar-track"><div class="live-bar-fill"></div></div>
+                  </div>
+                  <div class="dash-scroll-stat">
+                    <div class="dash-stat-item show" id="dsi0"><div class="dash-stat-dot"></div><div class="dash-stat-txt"><span>2000+</span> Active Creators Network</div></div>
+                    <div class="dash-stat-item" id="dsi1"><div class="dash-stat-dot"></div><div class="dash-stat-txt">Go Live in <span>24 Hours</span></div></div>
+                    <div class="dash-stat-item" id="dsi2"><div class="dash-stat-dot"></div><div class="dash-stat-txt"><span>5 Platforms</span> Simultaneously</div></div>
+                    <div class="dash-stat-item" id="dsi3"><div class="dash-stat-dot"></div><div class="dash-stat-txt">Organic. <span>Not Ads.</span></div></div>
+                  </div>
+                  <div class="sec-lbl">Recent Campaigns</div>
+                  <div class="sr"><div class="sp">🎵</div><div class="si-info"><div class="si-n">T-Series — Artist Promo</div><div class="si-v">Multi-platform push</div></div><div class="badge b-paid">Done</div></div>
+                  <div class="sr"><div class="sp">🎭</div><div class="si-info"><div class="si-n">Balathissecond — Single</div><div class="si-v">Do You Feel It?</div></div><div class="badge b-paid">Done</div></div>
+                  <div class="sr"><div class="sp">💜</div><div class="si-info"><div class="si-n">Eromify — Brand</div><div class="si-v">UGC + Clips</div></div><div class="badge b-pending">Live</div></div>
+                  <div class="sr"><div class="sp">🥤</div><div class="si-info"><div class="si-n">Coke Studio — Session</div><div class="si-v">Clips · Reels · Shorts</div></div><div class="badge b-paid">Done</div></div>
+                  <div class="sr"><div class="sp">🎮</div><div class="si-info"><div class="si-n">GameBrand — Launch</div><div class="si-v">Gaming creators · 5 platforms</div></div><div class="badge b-pending">Live</div></div>
+
+                  <!-- Extra scrollable section: Platform breakdown -->
+                  <div class="sec-lbl" style="margin-top:4px">Platform Breakdown</div>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <div style="background:#010A08;border-radius:8px;padding:7px 10px;border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:8px">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                      <div style="flex:1"><div style="font-size:8px;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.06em">YouTube Shorts</div><div style="height:3px;background:rgba(255,0,0,.15);border-radius:2px;margin-top:3px"><div style="height:100%;width:78%;background:#FF0000;border-radius:2px"></div></div></div>
+                      <div style="font-family:var(--font-display);font-size:11px;color:#fff">78%</div>
+                    </div>
+                    <div style="background:#010A08;border-radius:8px;padding:7px 10px;border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:8px">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.22 8.22 0 0 0 4.82 1.55V6.79a4.85 4.85 0 0 1-1.05-.1z"/></svg>
+                      <div style="flex:1"><div style="font-size:8px;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.06em">TikTok</div><div style="height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:3px"><div style="height:100%;width:65%;background:var(--teal);border-radius:2px"></div></div></div>
+                      <div style="font-family:var(--font-display);font-size:11px;color:var(--teal)">65%</div>
+                    </div>
+                    <div style="background:#010A08;border-radius:8px;padding:7px 10px;border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:8px">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+                      <div style="flex:1"><div style="font-size:8px;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Instagram Reels</div><div style="height:3px;background:rgba(225,48,108,.12);border-radius:2px;margin-top:3px"><div style="height:100%;width:52%;background:#E1306C;border-radius:2px"></div></div></div>
+                      <div style="font-family:var(--font-display);font-size:11px;color:#fff">52%</div>
+                    </div>
+                  </div>
+
+                  <!-- Earnings preview -->
+                  <div class="sec-lbl" style="margin-top:4px">Creator Earnings This Month</div>
+                  <div style="background:linear-gradient(135deg,rgba(0,255,209,.06),rgba(0,255,209,.02));border:1px solid rgba(0,255,209,.18);border-radius:10px;padding:12px;text-align:center">
+                    <div style="font-family:var(--font-display);font-size:32px;color:var(--teal);line-height:1;text-shadow:0 0 20px rgba(0,255,209,.4)">$48K+</div>
+                    <div style="font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-top:4px">Paid Out to Creators</div>
+                  </div>
+
+                  <div style="height:20px"></div>
+                </div>
+              </div>
+
+              <!-- Screen reflection -->
+              <div class="ip17-reflection"></div>
+              <!-- Scroll hint -->
+              <div class="ip17-scroll-hint" id="scrollHint">
+                <span class="ip17-scroll-hint-text">Scroll</span>
+                <div class="ip17-scroll-hint-arrow"></div>
+              </div>
+              <!-- Home indicator -->
+              <div class="ip17-home"></div>
             </div>
           </div>
-          <div class="p-stats">
-            <div class="sc black"><div class="sc-l">Clipping</div><div class="sc-v orange" id="tw-clip"></div></div>
-            <div class="sc"><div class="sc-l">UGC</div><div class="sc-v" id="tw-ugc"></div></div>
-            <div class="sc"><div class="sc-l">Logos</div><div class="sc-v" id="tw-logos"></div></div>
-            <div class="sc"><div class="sc-l">Growth</div><div class="sc-v" id="tw-growth"></div></div>
-          </div>
-          <div class="sec-lbl" id="tw-plat-lbl"></div>
-          <div class="platforms" style="grid-template-columns:repeat(3,1fr)">
-            <div class="plat-card black"><div class="plat-icon">♪</div><div class="plat-name" id="tw-tiktok"></div><div class="plat-badge badge-active">Active</div></div>
-            <div class="plat-card"><div class="plat-icon">▶</div><div class="plat-name" id="tw-youtube"></div><div class="plat-badge badge-active">Active</div></div>
-            <div class="plat-card"><div class="plat-icon">◈</div><div class="plat-name" id="tw-insta"></div><div class="plat-badge badge-active">Active</div></div>
-            <div class="plat-card"><div class="plat-icon">𝕏</div><div class="plat-name" id="tw-twitter"></div><div class="plat-badge badge-active">Active</div></div>
-            <div class="plat-card"><div class="plat-icon">f</div><div class="plat-name" id="tw-fb"></div><div class="plat-badge badge-active">Active</div></div>
-          </div>
-          <div class="sec-lbl" id="tw-camp-lbl"></div>
-          <div class="sr"><div class="sp">🎵</div><div class="si-info"><div class="si-n" id="tw-c1"></div><div class="si-v" id="tw-c1s"></div></div><div class="badge b-paid">Done</div></div>
-          <div class="sr"><div class="sp">🎭</div><div class="si-info"><div class="si-n" id="tw-c2"></div><div class="si-v" id="tw-c2s"></div></div><div class="badge b-paid">Done</div></div>
-          <div class="sr"><div class="sp">💜</div><div class="si-info"><div class="si-n" id="tw-c3"></div><div class="si-v" id="tw-c3s"></div></div><div class="badge b-pending">Live</div></div>
+
+          <!-- Screen glow beneath -->
+          <div class="ip17-screen-glow"></div>
         </div>
       </div>
     </div>
@@ -386,7 +1153,7 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
 
 <!-- TICKER -->
 <div id="ticker">
-  <div class="ticker-track" id="tickerTrack">
+  <div class="ticker-track">
     <span class="ticker-item">T-Series <span>✓</span></span>
     <span class="ticker-item">Coke Studio <span>✓</span></span>
     <span class="ticker-item">Eromify <span>✓</span></span>
@@ -395,7 +1162,6 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
     <span class="ticker-item">2000+ Creators <span>✓</span></span>
     <span class="ticker-item">TikTok · YouTube · Instagram <span>✓</span></span>
     <span class="ticker-item">10x vs Traditional Ads <span>✓</span></span>
-    <!-- duplicate for seamless loop -->
     <span class="ticker-item">T-Series <span>✓</span></span>
     <span class="ticker-item">Coke Studio <span>✓</span></span>
     <span class="ticker-item">Eromify <span>✓</span></span>
@@ -414,12 +1180,12 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
     <div class="stitle">YOUR <span>INDUSTRY,</span><br>OUR REACH</div>
     <p class="ssub">Whether you're dropping a track, launching an app, or building a brand — we have creators who make it go viral.</p>
     <div class="who-grid">
-      <div class="who-card" onclick="scrollToBook()"><span class="who-emoji">🎵</span><div class="who-title">Music Labels &amp; Artists</div><p class="who-desc">Release campaigns, song promos, and artist discovery — pushed through music-niche creators who know how to make tracks trend. We've worked with T-Series and Coke Studio music projects.</p><div class="who-tag">Get started</div></div>
-      <div class="who-card hl" onclick="scrollToBook()"><span class="who-emoji">📺</span><div class="who-title">TV Shows &amp; Edits</div><p class="who-desc">Clips, highlights, and fan-edit content that builds community and drives streams. Perfect for new seasons, launches, and show awareness campaigns.</p><div class="who-tag">Get started</div></div>
-      <div class="who-card" onclick="scrollToBook()"><span class="who-emoji">🎮</span><div class="who-title">Gaming Brands &amp; Studios</div><p class="who-desc">Game clips, reviews, and hype content from authentic gaming creators. Drive wishlists, downloads, and community growth organically.</p><div class="who-tag">Get started</div></div>
-      <div class="who-card" onclick="scrollToBook()"><span class="who-emoji">🏷️</span><div class="who-title">Brands &amp; Businesses</div><p class="who-desc">Product showcases, UGC, and brand awareness content that converts better than any paid ad. Real people. Real reviews. Real results. Like our work with Eromify.</p><div class="who-tag">Get started</div></div>
-      <div class="who-card" onclick="scrollToBook()"><span class="who-emoji">📡</span><div class="who-title">Streamers &amp; Creators</div><p class="who-desc">Grow your audience with clipped highlights distributed across platforms. More clips = more discovery = more followers and subscribers.</p><div class="who-tag">Get started</div></div>
-      <div class="who-card" onclick="window.open('https://discord.gg/akgUVZRAwb','_blank')"><span class="who-emoji">✂️</span><div class="who-title">Want to Clip?</div><p class="who-desc">Join our Discord, pick active campaigns, and earn for every view your clips generate. No pitch. No complicated process. Just create.</p><div class="who-tag">Join Discord</div></div>
+      <div class="who-card" onclick="scrollToBook()"><div class="who-icon"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="who-title">Music Labels &amp; Artists</div><p class="who-desc">Release campaigns, song promos, and artist discovery — pushed through music-niche creators. We've worked with T-Series and Coke Studio.</p><div class="who-tag">Get started</div></div>
+      <div class="who-card hl" onclick="scrollToBook()"><div class="who-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="who-title">TV Shows &amp; Edits</div><p class="who-desc">Clips, highlights, and fan-edit content that builds community and drives streams. Perfect for launches and show awareness campaigns.</p><div class="who-tag">Get started</div></div>
+      <div class="who-card" onclick="scrollToBook()"><div class="who-icon"><svg viewBox="0 0 24 24"><rect x="6" y="11" width="4" height="9"/><rect x="14" y="7" width="4" height="13"/><rect x="2" y="15" width="4" height="5"/><path d="M18 3l2 2-2 2"/><path d="M20 5H14"/></svg></div><div class="who-title">Gaming Brands &amp; Studios</div><p class="who-desc">Game clips, reviews, and hype content from authentic gaming creators. Drive wishlists, downloads, and community growth organically.</p><div class="who-tag">Get started</div></div>
+      <div class="who-card" onclick="scrollToBook()"><div class="who-icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div><div class="who-title">Brands &amp; Businesses</div><p class="who-desc">Product showcases, UGC, and brand awareness that converts better than any paid ad. Real people. Real reviews. Real results.</p><div class="who-tag">Get started</div></div>
+      <div class="who-card" onclick="scrollToBook()"><div class="who-icon"><svg viewBox="0 0 24 24"><path d="M21 2H3v16h5l3 3 3-3h5V2z"/></svg></div><div class="who-title">Streamers &amp; Creators</div><p class="who-desc">Grow your audience with clipped highlights distributed across platforms. More clips = more discovery = more followers.</p><div class="who-tag">Get started</div></div>
+      <div class="who-card" onclick="scrollToBook()"><div class="who-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="11" r="3"/><path d="M12 3a8 8 0 0 1 8 8c0 4.4-3.6 8-8 8s-8-3.6-8-8"/><path d="M12 19v3"/><path d="M8 23h8"/></svg></div><div class="who-title">Podcasters &amp; Shows</div><p class="who-desc">Turn long episodes into viral short clips. Audiograms, highlight cuts, and quote cards pushed across TikTok, Reels, and Shorts for maximum listener growth.</p><div class="who-tag">Get started</div></div>
     </div>
   </div>
 </section>
@@ -427,45 +1193,121 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
 <!-- CLIENTS -->
 <section id="clients">
   <div class="si2">
-    <div class="clients-label">Trusted by labels, artists &amp; brands</div>
-    <div class="clients-row">
-      <div class="client-chip">
-        <div class="client-badge cb-red">TS</div>
-        <div><div class="client-name">T-Series</div><div class="client-sub">Music Label</div></div>
-      </div>
-      <div class="client-chip">
-        <div class="client-badge cb-coke">CS</div>
-        <div><div class="client-name">Coke Studio</div><div class="client-sub">Music Campaign</div></div>
-      </div>
-      <div class="client-chip">
-        <img class="client-logo" src="/mnt/user-data/uploads/1773259596763_image.png" alt="Eromify" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="client-badge cb-pink" style="display:none">E</div>
-        <div><div class="client-name">Eromify</div><div class="client-sub">Brand &amp; UGC</div></div>
-      </div>
-      <div class="client-chip">
-        <div class="client-badge cb-indi">B</div>
-        <div><div class="client-name">Balathissecond</div><div class="client-sub">Do You Feel It? — Single</div></div>
-      </div>
+    <div class="clients-label">Brands &amp; Artists We've Grown</div>
+    <div class="clients-title">TRUSTED BY THE <span>BEST</span></div>
+    <p class="clients-sub">From India's largest music label to independent artists — results that speak for themselves.</p>
+    <div class="clients-grid">
+      <div class="cc cc-ts">
+        <div class="cc-logo logo-ts">
+          <svg viewBox="0 0 60 60" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="tsG" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF4444"/>
+                <stop offset="100%" stop-color="#CC0000"/>
+              </linearGradient>
+            </defs>
+            <rect width="60" height="60" rx="14" fill="url(#tsG)"/>
+            <!-- T-Series wordmark style: T with series lines -->
+            <rect x="8" y="11" width="44" height="7" rx="2" fill="white"/>
+            <rect x="26" y="11" width="8" height="30" rx="2" fill="white"/>
+            <!-- Series dots -->
+            <circle cx="13" cy="46" r="2.5" fill="rgba(255,255,255,.7)"/>
+            <circle cx="21" cy="46" r="2.5" fill="rgba(255,255,255,.7)"/>
+            <circle cx="29" cy="46" r="2.5" fill="rgba(255,255,255,.7)"/>
+            <circle cx="37" cy="46" r="2.5" fill="rgba(255,255,255,.7)"/>
+            <circle cx="45" cy="46" r="2.5" fill="rgba(255,255,255,.7)"/>
+          </svg>
+        </div><div class="cc-tag tag-music">🎵 Music Label</div><div class="cc-name">T-Series</div><div class="cc-desc">India's #1 music label. Multi-platform creator campaigns pushed their tracks to millions of new listeners organically.</div><div class="cc-stat"><span class="cc-stat-icon">📈</span><span class="cc-stat-text">Multi-platform push</span><span class="cc-stat-val">✓ Done</span></div></div>
+      <div class="cc cc-cs">
+        <div class="cc-logo logo-cs">
+          <svg viewBox="0 0 60 60" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="csG" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#E8001A"/>
+                <stop offset="100%" stop-color="#7A0000"/>
+              </linearGradient>
+            </defs>
+            <rect width="60" height="60" rx="14" fill="url(#csG)"/>
+            <!-- C arc shape -->
+            <path d="M42 14 A16 16 0 1 0 42 46" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <!-- Musical note dot -->
+            <circle cx="42" cy="14" r="3.5" fill="white"/>
+            <circle cx="42" cy="46" r="3.5" fill="white"/>
+            <!-- Studio bar -->
+            <rect x="12" y="28" width="22" height="4" rx="2" fill="rgba(255,255,255,.35)"/>
+          </svg>
+        </div><div class="cc-tag tag-music">🎤 Music Campaign</div><div class="cc-name">Coke Studio</div><div class="cc-desc">The legendary music platform. Creator-led clips amplified their sessions across TikTok, YouTube Shorts &amp; Instagram Reels.</div><div class="cc-stat"><span class="cc-stat-icon">▶</span><span class="cc-stat-text">Viral clips deployed</span><span class="cc-stat-val">✓ Done</span></div></div>
+      <div class="cc cc-er">
+        <div class="cc-logo logo-er">
+          <svg viewBox="0 0 60 60" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="erG" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#C939D4"/>
+                <stop offset="100%" stop-color="#6200A3"/>
+              </linearGradient>
+            </defs>
+            <rect width="60" height="60" rx="14" fill="url(#erG)"/>
+            <!-- Modern E lettermark -->
+            <rect x="14" y="13" width="6" height="34" rx="2" fill="white"/>
+            <rect x="14" y="13" width="30" height="6" rx="2" fill="white"/>
+            <rect x="14" y="27" width="24" height="6" rx="2" fill="white"/>
+            <rect x="14" y="41" width="30" height="6" rx="2" fill="white"/>
+            <!-- Accent dot -->
+            <circle cx="50" cy="30" r="3" fill="rgba(255,255,255,.4)"/>
+          </svg>
+        </div><div class="cc-tag tag-brand">🛍️ Brand &amp; UGC</div><div class="cc-name">Eromify</div><div class="cc-desc">A fast-growing brand that needed authentic UGC at scale. Full clipping + UGC campaign driving real conversions.</div><div class="cc-stat"><span class="cc-stat-icon">🎥</span><span class="cc-stat-text">UGC + Clipping</span><span class="cc-stat-val">✓ Done</span></div></div>
+      <div class="cc cc-ba">
+        <div class="cc-logo logo-ba">
+          <svg viewBox="0 0 60 60" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="baG" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00FFD1"/>
+                <stop offset="100%" stop-color="#005A46"/>
+              </linearGradient>
+            </defs>
+            <rect width="60" height="60" rx="14" fill="#020D0B"/>
+            <rect x="1" y="1" width="58" height="58" rx="13" fill="none" stroke="rgba(0,255,209,.3)" stroke-width="1.5"/>
+            <!-- Sound waveform bars -->
+            <rect x="8" y="24" width="5" height="12" rx="2.5" fill="url(#baG)" opacity=".5"/>
+            <rect x="16" y="18" width="5" height="24" rx="2.5" fill="url(#baG)" opacity=".7"/>
+            <rect x="24" y="12" width="5" height="36" rx="2.5" fill="url(#baG)"/>
+            <rect x="32" y="18" width="5" height="24" rx="2.5" fill="url(#baG)" opacity=".7"/>
+            <rect x="40" y="24" width="5" height="12" rx="2.5" fill="url(#baG)" opacity=".5"/>
+            <rect x="48" y="27" width="5" height="6" rx="2.5" fill="url(#baG)" opacity=".3"/>
+          </svg>
+        </div><div class="cc-tag tag-artist">🎶 Independent Artist</div><div class="cc-name">Balathissecond</div><div class="cc-desc">"Do You Feel It?" — a single that needed discovery. Creator clips spread the track to new audiences across every major platform.</div><div class="cc-stat"><span class="cc-stat-icon">🎵</span><span class="cc-stat-text">Single release push</span><span class="cc-stat-val">✓ Done</span></div></div>
+    </div>
+    <div class="clients-trust">
+      <div class="trust-item"><span class="trust-icon">📈</span><div><div class="trust-val">1B+</div><div class="trust-lbl">Views Delivered</div></div></div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,.07)"></div>
+      <div class="trust-item"><span class="trust-icon">👥</span><div><div class="trust-val">2000+</div><div class="trust-lbl">Active Creators</div></div></div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,.07)"></div>
+      <div class="trust-item"><span class="trust-icon">⚡</span><div><div class="trust-val">24 HRS</div><div class="trust-lbl">To Go Live</div></div></div>
+      <div style="width:1px;height:40px;background:rgba(255,255,255,.07)"></div>
+      <div class="trust-item"><span class="trust-icon">🌍</span><div><div class="trust-val">5</div><div class="trust-lbl">Platforms</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- PROOF / CREATOR NETWORK -->
+<!-- PROOF -->
 <section id="proof">
   <div class="si2">
     <div class="proof-inner">
       <div class="proof-text">
         <div class="slbl">Creator Network</div>
-        <div class="stitle" style="font-size:58px">500+ <span>CREATORS</span><br>READY TO<br>GO LIVE</div>
-        <p>Our network of 2000+ verified clippers and UGC creators is active across 5 platforms — TikTok, YouTube, Instagram, X (Twitter), and Facebook. Every campaign you launch reaches real creators immediately — no waiting, no chasing.</p>
-
+        <div class="stitle" style="font-size:60px">500+ <span>CREATORS</span><br>READY TO<br>GO LIVE</div>
+        <p>Our network of 2000+ verified clippers and UGC creators is active across 5 platforms — TikTok, YouTube, Instagram, X (Twitter), and Facebook. Every campaign reaches real creators immediately.</p>
       </div>
       <div class="proof-cards">
-        <div class="proof-card"><div class="pc-icon">🎵</div><div class="pc-info"><div class="pc-name">T-Series Campaign</div><div class="pc-stat">Multi-platform · Music Promo</div></div><div class="pc-val">✓ Done</div></div>
-        <div class="proof-card"><div class="pc-icon">🥤</div><div class="pc-info"><div class="pc-name">Coke Studio</div><div class="pc-stat">Brand × Music · Viral Clips</div></div><div class="pc-val">✓ Done</div></div>
-        <div class="proof-card"><div class="pc-icon">🎤</div><div class="pc-info"><div class="pc-name">Balathissecond — Do You Feel It?</div><div class="pc-stat">Single release · Creator push</div></div><div class="pc-val">✓ Done</div></div>
-        <div class="proof-card"><div class="pc-icon">💜</div><div class="pc-info"><div class="pc-name">Eromify</div><div class="pc-stat">Brand UGC + Clipping campaign</div></div><div class="pc-val">✓ Done</div></div>
-        <div class="proof-card" style="border-style:dashed;opacity:.5"><div class="pc-icon">🔒</div><div class="pc-info"><div class="pc-name">More proofs available</div><div class="pc-stat">Open a Discord ticket to access</div></div><div class="pc-val" style="font-size:14px;color:var(--muted)">→</div></div>
+        <div class="proof-card"><div class="pc-icon">🎵</div><div class="pc-info"><div class="pc-name">T-Series Campaign</div><div class="pc-stat">Multi-platform · Music Promo</div></div><div class="pc-val">✓</div></div>
+        <div class="proof-card"><div class="pc-icon">🥤</div><div class="pc-info"><div class="pc-name">Coke Studio</div><div class="pc-stat">Brand × Music · Viral Clips</div></div><div class="pc-val">✓</div></div>
+        <div class="proof-card"><div class="pc-icon">🎤</div><div class="pc-info"><div class="pc-name">Balathissecond — Do You Feel It?</div><div class="pc-stat">Single release · Creator push</div></div><div class="pc-val">✓</div></div>
+        <div class="proof-card"><div class="pc-icon">💜</div><div class="pc-info"><div class="pc-name">Eromify</div><div class="pc-stat">Brand UGC + Clipping campaign</div></div><div class="pc-val">✓</div></div>
+        <div class="proof-card proof-discord-card" style="border-color:rgba(88,101,242,.3);background:rgba(88,101,242,.03)" onclick="window.open('https://discord.gg/akgUVZRAwb','_blank')">
+          <div class="pc-icon" style="background:rgba(88,101,242,.12);border-color:rgba(88,101,242,.3)"><svg viewBox="0 0 24 24" width="22" height="22" fill="#7289da"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg></div>
+          <div class="pc-info"><div class="pc-name" style="color:#8b9dff"><span id="proofTypewriter"></span><span class="tw-cursor">|</span></div><div class="pc-stat">Open a Discord ticket to access</div></div>
+          <a href="https://discord.gg/akgUVZRAwb" target="_blank" class="discord-proof-btn" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>Join Discord</a>
+        </div>
       </div>
     </div>
   </div>
@@ -497,41 +1339,41 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
   </div>
 </section>
 
-<!-- WHY CLIPPING -->
+<!-- CLIPPING VS -->
 <section id="clipping">
   <div class="si2">
     <div class="clip-header">
       <div class="slbl" style="text-align:center">Why Clipping</div>
       <div class="stitle" style="text-align:center;font-size:76px">CLIPPING IS THE<br><span>FUTURE OF ADS</span></div>
-      <p class="ssub" style="text-align:center">Traditional ads interrupt. Emails go unread. Clips entertain. Clipping delivers 10x better results than email marketing, Telegram blasts, or paid ads — because it works <em>with</em> the algorithm, not against it.</p>
+      <p class="ssub" style="text-align:center">Traditional ads interrupt. Emails go unread. Clips entertain. Clipping delivers 10x better results — because it works <em>with</em> the algorithm, not against it.</p>
     </div>
     <div class="clip-vs">
       <div class="vs-col">
-        <div class="vs-col-title bad">❌ &nbsp;Traditional Ads</div>
+        <div class="vs-col-title bad">❌&nbsp; Traditional Ads</div>
         <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; Expensive CPMs with diminishing returns</div>
         <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; Audiences skip or block ads instinctively</div>
         <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; Feels promotional — instantly kills trust</div>
-        <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; One piece of content &mdash; limited shelf life, gone in days</div>
+        <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; One piece of content — limited shelf life</div>
         <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; Hard to scale without massive budget increases</div>
         <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; Zero organic discovery potential</div>
-        <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; Email &amp; Telegram have <5% open rate — clips get millions of views</div>
+        <div class="vs-item bad"><span class="vs-ico">✕</span>&nbsp; Email &amp; Telegram have &lt;5% open rate</div>
       </div>
       <div class="vs-divider"><div class="vs-badge">VS</div></div>
       <div class="vs-col">
-        <div class="vs-col-title good">✓ &nbsp;ReachPoint Clipping</div>
+        <div class="vs-col-title good">✓&nbsp; ReachPoint Clipping</div>
         <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; Pay only for real, organic views generated</div>
         <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; Content blends natively — people actually watch</div>
         <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; Authentic UGC builds real trust &amp; social proof</div>
-        <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; Hundreds of clips = compounding, long-term reach that grows over time</div>
+        <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; Hundreds of clips = compounding long-term reach</div>
         <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; More creators = exponential view growth</div>
         <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; Algorithm-friendly — platforms push it natively</div>
-        <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; 10x better reach than email blasts or Telegram channels</div>
+        <div class="vs-item good"><span class="vs-ico">✓</span>&nbsp; 10x better reach than email or Telegram channels</div>
       </div>
     </div>
     <div class="clip-types">
-      <div class="clip-type"><div class="ct-icon">✂️</div><div class="ct-title">Clipping</div><p class="ct-desc">We transform your long-form content — streams, interviews, music videos — into high-retention short clips built for TikTok, Reels, and Shorts virality.</p></div>
-      <div class="clip-type"><div class="ct-icon">🎥</div><div class="ct-title">UGC Content</div><p class="ct-desc">Real creators make authentic content about your brand — reviews, showcases, reactions. UGC converts significantly better than polished brand ads because people trust people.</p></div>
-      <div class="clip-type"><div class="ct-icon">🎨</div><div class="ct-title">Logo &amp; Brand Assets</div><p class="ct-desc">We design logos, overlays, and visual identity for <strong style="color:var(--orange)">every category</strong> — music labels, gaming studios, brands, streamers, TV shows, and independent artists. Your brand, looking sharp across every platform.</p></div>
+      <div class="clip-type"><div class="ct-icon">✂️</div><div class="ct-title">Clipping</div><p class="ct-desc">We transform your long-form content into high-retention short clips built for TikTok, Reels, and Shorts virality.</p></div>
+      <div class="clip-type"><div class="ct-icon">🎥</div><div class="ct-title">UGC Content</div><p class="ct-desc">Real creators make authentic content about your brand — reviews, showcases, reactions. UGC converts significantly better than polished brand ads.</p></div>
+      <div class="clip-type"><div class="ct-icon">🏷️</div><div class="ct-title">Logo Campaigns</div><p class="ct-desc">We push your brand's logo into short-form content at scale — watermarks, overlays, and branded clips distributed across platforms.</p></div>
     </div>
   </div>
 </section>
@@ -547,14 +1389,17 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
       <div class="brand-card featured"><div class="bc-icon">🚀</div><div class="bc-title">Up to 1B+ Views</div><p class="bc-desc">We've generated over 1 billion views for brands across our network. That's the reach most companies dream of — we make it a reality.</p></div>
       <div class="brand-card"><div class="bc-icon">🎨</div><div class="bc-title">Authentic, Not Salesy</div><p class="bc-desc">Clips and UGC feel like real content, not ads. Your audience watches, engages, and remembers — instead of scrolling straight past.</p></div>
       <div class="brand-card"><div class="bc-icon">📊</div><div class="bc-title">Full Transparency</div><p class="bc-desc">Real-time view tracking across every submission. You always know exactly where your budget is going and what it's delivering back.</p></div>
-      <div class="brand-card"><div class="bc-icon">🎯</div><div class="bc-title">Niche-Matched Creators</div><p class="bc-desc">Music, gaming, lifestyle, apps — we match your campaign with creators whose audience already cares deeply about your category.</p></div>
+      <div class="brand-card"><div class="bc-icon">🎯</div><div class="bc-title">Niche-Matched Creators</div><p class="bc-desc">Music, gaming, lifestyle, apps, podcasts — we match your campaign with creators whose audience already cares deeply about your category.</p></div>
       <div class="brand-card"><div class="bc-icon">⚡</div><div class="bc-title">Fast Turnaround</div><p class="bc-desc">Campaign briefed today, content live tomorrow. Our Discord-first workflow means creators move fast and volume builds almost instantly.</p></div>
     </div>
-    <div style="text-align:center;margin-top:48px"><button class="btn-p" onclick="scrollToBook()">Start a Campaign</button></div>
+    <div style="text-align:center;margin-top:52px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-p" onclick="scrollToBook()">Schedule a Call</button>
+      <button class="btn-campaign" onclick="scrollToCampaign()">Start a Campaign ⚡</button>
+    </div>
   </div>
 </section>
 
-<!-- FAQ -->
+<!-- FAQ (removed "Can I see proof of past campaigns?") -->
 <section id="faq">
   <div class="si2">
     <div class="slbl">FAQ</div>
@@ -562,261 +1407,533 @@ footer{background:#040404;border-top:1px solid var(--border);padding:60px 0 40px
     <p class="ssub">Everything you need to know before getting started.</p>
     <div class="faq-grid">
       <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How long does a campaign take to go live?<span class="faq-icon">+</span></div><div class="faq-a">Once we receive your brief and confirm the campaign, creators can start posting within 24 hours. Most campaigns see significant view volume within the first 3–5 days.</div></div>
-      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do you track views?<span class="faq-icon">+</span></div><div class="faq-a">Our team manually verifies view counts across all submitted links on TikTok, YouTube, and Instagram. Creators submit their links through our Discord bot, and we track performance in real time.</div></div>
-      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What's the minimum budget to start?<span class="faq-icon">+</span></div><div class="faq-a">Campaign pricing varies based on your goals, platform, and content type. Every campaign is custom-quoted — reach out via the Schedule a Call form and we'll work out the right scope for you.</div></div>
-      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Can I see proof of past campaigns?<span class="faq-icon">+</span></div><div class="faq-a">Yes. Join our Discord server and open a ticket on the main server — our team will share verified creator stats, past campaign results, and audience breakdowns for your category.</div></div>
-      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What platforms do you work on?<span class="faq-icon">+</span></div><div class="faq-a">We support TikTok, YouTube Shorts, Instagram Reels, X (Twitter), and Facebook Reels — 5 platforms total. Creators can post on one or multiple platforms depending on your campaign brief.</div></div>
-      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I join as a clipper?<span class="faq-icon">+</span></div><div class="faq-a">Clippers join exclusively through our Discord server. Head to discord.gg/akgUVZRAwb, read the rules, and start picking up active campaigns. Once you've generated views, open a ticket on our server to receive your payment proof and payout.</div></div>
+      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do you track views?<span class="faq-icon">+</span></div><div class="faq-a">Our team manually verifies view counts across all submitted links on TikTok, YouTube, and Instagram. Creators submit through our Discord bot, and we track performance in real time.</div></div>
+      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What's the minimum budget to start?<span class="faq-icon">+</span></div><div class="faq-a">Campaign pricing varies based on your goals, platform, and content type. Every campaign is custom-quoted — reach out via Schedule a Call and we'll work out the right scope for you.</div></div>
+      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What platforms do you work on?<span class="faq-icon">+</span></div><div class="faq-a">We support TikTok, YouTube Shorts, Instagram Reels, X (Twitter), and Facebook Reels — 5 platforms total.</div></div>
+      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I join as a clipper?<span class="faq-icon">+</span></div><div class="faq-a">Clippers join exclusively through our Discord server at discord.gg/akgUVZRAwb. Read the rules, start picking up active campaigns, and open a ticket to receive your payout once you've generated views.</div></div>
+      <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What types of content work best for campaigns?<span class="faq-icon">+</span></div><div class="faq-a">Short-form clips, reaction content, highlight edits, and UGC reviews consistently outperform static content. Our creators know what formats each platform's algorithm rewards.</div></div>
     </div>
   </div>
 </section>
 
-<!-- SCHEDULE A CALL -->
+<!-- BOOK / CAMPAIGN -->
 <section id="book">
   <div class="book-glow"></div>
   <div class="si2">
-    <div class="book-inner">
-      <div class="book-left">
-        <div class="slbl">Let's Talk</div>
-        <div class="stitle" style="font-size:52px">SCHEDULE<br>A <span>CALL</span></div>
-        <p>Tell us who you are and what you're building. Whether you want to go viral, grow an artist, launch a game — we'll find the best strategy in 20 minutes.</p>
-        <div class="book-points">
-          <div class="book-point">We'll understand your goals &amp; audience</div>
-          <div class="book-point">Walk you through how we run campaigns</div>
-          <div class="book-point">Suggest the right mix — clips, UGC, or both</div>
-          <div class="book-point">No commitment. Just a real conversation.</div>
+    <div class="book-label" id="book-section-label">Let's Work Together</div>
+    <div class="book-headline" id="book-headline">READY TO<br><span id="book-hl-span">GO VIRAL?</span></div>
+    <div class="tabs-header">
+      <button class="tab-btn tab-call active" onclick="switchTab('call',this)"><span class="tab-btn-dot"></span>Schedule a Call</button>
+      <button class="tab-btn tab-campaign" onclick="switchTab('campaign',this)"><span class="tab-btn-dot"></span>Start a Campaign</button>
+    </div>
+    <div class="tab-pane active" id="tab-call">
+      <div class="book-card-wrap">
+        <div class="book-card">
+          <div class="bk-left">
+            <div>
+              <div class="bk-eyebrow"><div class="bk-dot"></div><span class="bk-eyebrow-txt">Free · 20 Minutes · No Pitch</span></div>
+              <div class="bk-title">THE<br>FASTEST<br>WAY TO<br><span>GO VIRAL</span></div>
+              <p class="bk-sub">Tell us what you're building. Whether it's a music drop, a brand launch, or a game release — we'll map the exact strategy in one call.</p>
+            </div>
+            <div class="bk-points">
+              <div class="bk-pt"><div class="bk-pt-icon">🎯</div><div><div class="bk-pt-title">We understand your goals first</div><div class="bk-pt-desc">Audience, platforms, timeline &amp; budget</div></div></div>
+              <div class="bk-pt"><div class="bk-pt-icon">📋</div><div><div class="bk-pt-title">Walk you through live campaigns</div><div class="bk-pt-desc">See exactly how our creator network operates</div></div></div>
+              <div class="bk-pt"><div class="bk-pt-icon">✂️</div><div><div class="bk-pt-title">Right mix: Clips, UGC, or both</div><div class="bk-pt-desc">Custom-matched to your category &amp; goals</div></div></div>
+              <div class="bk-pt"><div class="bk-pt-icon">🤝</div><div><div class="bk-pt-title">Zero commitment required</div><div class="bk-pt-desc">A real conversation — no pressure, no pitch</div></div></div>
+            </div>
+            <div class="bk-proof">
+              <div class="bk-proof-avs"><div class="bk-av bk-av-ts">T</div><div class="bk-av bk-av-cs">C</div><div class="bk-av bk-av-er">E</div><div class="bk-av bk-av-ba">B</div></div>
+              <div><div class="bk-proof-title">T-Series, Coke Studio &amp; more</div><div class="bk-proof-sub">1B+ organic views delivered</div></div>
+              <div class="bk-stars">★★★★★</div>
+            </div>
+          </div>
+          <div class="bk-right">
+            <div id="bookForm">
+              <div class="bk-form-title">Book your free call <span>→</span></div>
+              <form class="bkf" id="callForm" action="https://formspree.io/f/mzdjrnay" method="POST">
+                <div class="fg2">
+                  <div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="Michel" required></div>
+                  <div class="fg"><label>Email</label><input type="email" name="email" placeholder="you@example.com" required></div>
+                </div>
+                <div class="fg"><label>Telegram <span class="optional-tag">(optional)</span></label><input type="text" name="telegram" placeholder="@yourusername"></div>
+                <div class="fg2">
+                  <div class="fg"><label>I am a…</label><select name="category" required><option value="" disabled selected>Select category</option><option>Music Label / Artist</option><option>TV Show / Edits</option><option>Gaming Brand / Studio</option><option>Brand / Business</option><option>Streamer / Creator</option><option>Podcaster / Show Host</option></select></div>
+                  <div class="fg"><label>What do you need?</label><select name="service"><option value="" disabled selected>Select service</option><option>Clipping</option><option>UGC Content</option><option>Clipping + UGC</option><option>Logo Campaign</option><option>Not sure yet</option></select></div>
+                </div>
+                <div class="fg"><label>Campaign Brief <span class="optional-tag">(optional)</span></label><textarea name="brief" placeholder="Goals, audience, budget, timeline..."></textarea></div>
+                <input type="hidden" name="_subject" value="ReachPoint - Schedule a Call">
+                <button type="submit" class="submit-btn">⚡&nbsp;&nbsp;Schedule My Free Call</button>
+                <div class="form-note"><span>🔒</span> We'll reach out within 24 hours</div>
+              </form>
+            </div>
+            <div class="success-msg" id="successMsg" style="display:none">
+              <div class="success-icon">🎉</div>
+              <div class="success-title">YOU'RE IN!</div>
+              <p class="success-sub">We'll reach out within 24 hours. Join our Discord while you wait.</p>
+              <a href="https://discord.gg/akgUVZRAwb" target="_blank" class="btn-p" style="margin-top:20px;font-size:12px;padding:13px 28px">Join Discord →</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="book-right">
-        <div id="bookForm">
-          <form class="book-form" action="https://formspree.io/f/mzdjrnay" method="POST">
-            <div class="fg"><label>Your Name</label><input type="text" name="name" id="fname" placeholder="e.g. Rahul Sharma" required></div>
-            <div class="fg"><label>Email</label><input type="email" name="email" id="femail" placeholder="you@example.com" required></div>
-            <div class="fg"><label>Telegram (optional)</label><input type="text" name="telegram" id="ftelegram" placeholder="@yourusername"></div>
-            <div class="fg">
-              <label>I am a...</label>
-              <select name="category" id="ftype" required>
-                <option value="" disabled selected>Select your category</option>
-                <option value="Music Label / Artist">Music Label / Artist</option>
-                <option value="TV Show / Edits">TV Show / Edits</option>
-                <option value="Gaming Brand / Studio">Gaming Brand / Studio</option>
-                <option value="Brand / Business">Brand / Business</option>
-                <option value="Streamer / Creator">Streamer / Creator</option>
-              </select>
+    </div>
+    <div class="tab-pane" id="tab-campaign">
+      <div class="camp-card-wrap">
+        <div class="camp-card">
+          <div class="cp-left">
+            <div>
+              <div class="cp-eyebrow"><div class="cp-dot"></div><span class="cp-eyebrow-txt">Submit · Get Quoted · Go Live</span></div>
+              <div class="cp-title">LAUNCH<br>YOUR<br>CAMPAIGN<br><span>NOW</span></div>
+              <p class="cp-sub">Skip the call. Fill in your campaign details and we'll send you a custom quote within 24 hours.</p>
             </div>
-            <div class="fg">
-              <label>What do you need?</label>
-              <select name="service" id="fservice">
-                <option value="" disabled selected>Select service</option>
-                <option value="Clipping">Clipping</option>
-                <option value="UGC Content">UGC Content</option>
-                <option value="Clipping + UGC">Clipping + UGC</option>
-                <option value="Logo / Brand Assets">Logo / Brand Assets</option>
-                <option value="Not sure yet">Not sure yet</option>
-              </select>
+            <div class="cp-points">
+              <div class="cp-pt"><div class="cp-pt-icon">⚡</div><div><div class="cp-pt-title">No call needed</div><div class="cp-pt-desc">Submit details, get a quote in 24 hrs</div></div></div>
+              <div class="cp-pt"><div class="cp-pt-icon">🎯</div><div><div class="cp-pt-title">Custom pricing per campaign</div><div class="cp-pt-desc">Clips, UGC, or both — scoped to your goals</div></div></div>
+              <div class="cp-pt"><div class="cp-pt-icon">🚀</div><div><div class="cp-pt-title">Go live within 24–48 hrs</div><div class="cp-pt-desc">Creators start posting almost immediately</div></div></div>
+              <div class="cp-pt"><div class="cp-pt-icon">📊</div><div><div class="cp-pt-title">Full performance tracking</div><div class="cp-pt-desc">Real-time views across all platforms</div></div></div>
             </div>
-            <div class="fg"><label>Campaign Brief <span style="color:rgba(255,255,255,.3);font-weight:400">(optional)</span></label><textarea name="brief" id="fbrief" placeholder="Tell us your campaign goal, target audience, timeline, and budget..." style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 16px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s;outline:none;width:100%;resize:vertical;min-height:90px;box-sizing:border-box" onfocus="this.style.borderColor='rgba(255,106,0,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'"></textarea></div>
-            <input type="hidden" name="_subject" value="ReachPoint - Schedule a Call">
-            <button type="submit" class="submit-btn">Schedule My Call →</button>
-            <div class="form-note">We'll reach out within 24 hours</div>
-          </form>
-        </div>
-        <div class="success-msg" id="successMsg" style="display:none">
-          <div class="success-icon">🎉</div>
-          <div class="success-title">YOU'RE IN!</div>
-          <p class="success-sub">Thanks for reaching out! We'll get back to you within 24 hours at the email you provided.</p>
-          <a href="https://discord.gg/akgUVZRAwb" target="_blank" class="btn-p" style="margin-top:24px">Join Discord →</a>
+            <div class="cp-platforms">
+              <div class="cp-plat-lbl">Platforms we cover</div>
+              <div class="cp-plat-row">
+                <div class="cp-plat-icon"><svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+                <div class="cp-plat-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.22 8.22 0 0 0 4.82 1.55V6.79a4.85 4.85 0 0 1-1.05-.1z"/></svg></div>
+                <div class="cp-plat-icon"><svg viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>
+                <div class="cp-plat-icon"><svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+                <div class="cp-plat-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.735-8.835L1.254 2.25H8.08l4.259 5.632L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="cp-right">
+            <div id="campaignFormWrap">
+              <div class="cp-form-title">Campaign details <span>→</span></div>
+              <form class="bkf" id="campaignForm" action="https://formspree.io/f/mzdjrnay" method="POST">
+                <div class="fg2">
+                  <div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="Michel" required></div>
+                  <div class="fg"><label>Email</label><input type="email" name="email" placeholder="you@example.com" required></div>
+                </div>
+                <div class="fg2">
+                  <div class="fg"><label>Brand / Project Name</label><input type="text" name="brand" placeholder="T-Series, My App..." required></div>
+                  <div class="fg"><label>Campaign Type</label><select name="campaign_type" required><option value="" disabled selected>Select type</option><option>Clipping Only</option><option>UGC Only</option><option>Clipping + UGC</option><option>Logo Campaign</option><option>Music Release Push</option><option>Product Launch</option><option>Brand Awareness</option></select></div>
+                </div>
+                <div class="fg"><label>WhatsApp <span class="optional-tag">(optional)</span></label><input type="tel" name="whatsapp" placeholder="+1 234 567 8900"></div>
+                <div class="fg">
+                  <label>Platforms <span class="optional-tag">(select all that apply)</span></label>
+                  <div class="platform-checks">
+                    <div class="pchk" onclick="togglePchk(this,'TikTok')"><div class="pchk-box"><div class="pchk-box-inner"></div></div><span class="pchk-label">TikTok</span></div>
+                    <div class="pchk" onclick="togglePchk(this,'YouTube')"><div class="pchk-box"><div class="pchk-box-inner"></div></div><span class="pchk-label">YouTube</span></div>
+                    <div class="pchk" onclick="togglePchk(this,'Instagram')"><div class="pchk-box"><div class="pchk-box-inner"></div></div><span class="pchk-label">Instagram</span></div>
+                    <div class="pchk" onclick="togglePchk(this,'X')"><div class="pchk-box"><div class="pchk-box-inner"></div></div><span class="pchk-label">X</span></div>
+                    <div class="pchk" onclick="togglePchk(this,'Facebook')"><div class="pchk-box"><div class="pchk-box-inner"></div></div><span class="pchk-label">Facebook</span></div>
+                  </div>
+                  <input type="hidden" name="platforms" id="platformsInput">
+                </div>
+                <div class="fg">
+                  <label>Estimated Budget</label>
+                  <div class="budget-pills">
+                    <div class="bp" onclick="selectBudget(this,'Under $200')">Under $200</div>
+                    <div class="bp" onclick="selectBudget(this,'$200–$500')">$200–$500</div>
+                    <div class="bp" onclick="selectBudget(this,'$500–$1,000')">$500–$1,000</div>
+                    <div class="bp" onclick="selectBudget(this,'$1,000–$5,000')">$1k–$5k</div>
+                    <div class="bp" onclick="selectBudget(this,'$5,000+')">$5,000+</div>
+                    <div class="bp" onclick="selectBudget(this,'Not sure yet')">Not sure</div>
+                  </div>
+                  <input type="hidden" name="budget" id="budgetInput">
+                </div>
+                <div class="fg"><label>Campaign Goals <span class="optional-tag">(optional)</span></label><textarea name="details" placeholder="What are you promoting? Share any links, goals, target audience..."></textarea></div>
+                <input type="hidden" name="_subject" value="ReachPoint - Start a Campaign">
+                <button type="submit" class="submit-btn-campaign">🚀&nbsp;&nbsp;Submit Campaign Brief</button>
+                <div class="form-note"><span>🔒</span> We'll send your quote within 24 hrs</div>
+              </form>
+            </div>
+            <div class="success-msg" id="campaignSuccessMsg" style="display:none">
+              <div class="success-icon">🚀</div>
+              <div class="success-title" style="color:#ff8030">BRIEF SENT!</div>
+              <p class="success-sub">Expect a custom quote at your email within 24 hours.</p>
+              <a href="https://discord.gg/akgUVZRAwb" target="_blank" class="btn-p" style="margin-top:20px;font-size:12px;padding:13px 28px;background:linear-gradient(135deg,#ff7020,#e05010)">Join Discord →</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div>
       <div class="footer-logo">REACH<span>POINT</span></div>
       <div class="footer-tagline">Clipping &amp; UGC that grows your brand 10x faster than traditional ads.</div>
       <div class="footer-contact">
-
-<a href="mailto:media@reachpoint.in">✉ media@reachpoint.in</a>
+        <a href="mailto:media@reachpoint.in">✉ media@reachpoint.in</a>
         <a href="#">🌐 reachpoint.in</a>
       </div>
     </div>
     <div class="footer-links">
       <div class="footer-col"><div class="fc-title">Services</div><a href="#clipping">Why Clipping</a><a href="#how">How It Works</a><a href="#brands">For Brands</a><a href="#who">Who We Serve</a></div>
-      <div class="footer-col"><div class="fc-title">Industries</div><a href="#who">Music &amp; Artists</a><a href="#who">TV &amp; Edits</a><a href="#who">Gaming</a><a href="#who">Streamers</a></div>
-      <div class="footer-col"><div class="fc-title">Join Us</div><a href="https://discord.gg/akgUVZRAwb" target="_blank">Join as a Clipper</a><a href="#book">Schedule a Call</a><a href="/cdn-cgi/l/email-protection#ef828a8b868eaf9d8a8e8c879f8086819bc18681">Contact</a><a href="#faq">FAQ</a></div>
+      <div class="footer-col"><div class="fc-title">Industries</div><a href="#who">Music &amp; Artists</a><a href="#who">TV &amp; Edits</a><a href="#who">Gaming</a><a href="#who">Podcasters</a></div>
+      <div class="footer-col"><div class="fc-title">Join Us</div><a href="https://discord.gg/akgUVZRAwb" target="_blank">Join as a Clipper</a><a href="#book">Schedule a Call</a><a href="/cdn-cgi/l/email-protection#59343c3d3038192b3c383a31293630372d773037">Contact</a><a href="#faq">FAQ</a></div>
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2025 ReachPoint. All rights reserved.</div>
+    <div class="footer-copy">&copy; 2025 ReachPoint. All rights reserved.</div>
     <div class="footer-social">
-      <a class="social-btn" href="https://www.linkedin.com/in/reach-point-6ba18b387" target="_blank" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-      <a class="social-btn" href="https://www.instagram.com/reachpoint_" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
-      <a class="social-btn" href="https://discord.gg/akgUVZRAwb" target="_blank" title="Discord"><svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+      <a class="social-btn" href="https://www.linkedin.com/in/reach-point-6ba18b387" target="_blank"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a class="social-btn" href="https://www.instagram.com/reachpoint_" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+      <a class="social-btn" href="https://discord.gg/akgUVZRAwb" target="_blank"><svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg></a>
     </div>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- THREE.JS for 3D background -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ======= THREE.JS — AURORA VORTEX MESH =======
+(function(){
+  var canvas=document.getElementById('bg3d');
+  if(!canvas||typeof THREE==='undefined') return;
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,.1,1000);
+  camera.position.set(0,10,38);camera.lookAt(0,0,0);
+  var mouse={x:0,y:0};
+  document.addEventListener('mousemove',function(e){
+    mouse.x=(e.clientX/window.innerWidth-.5)*2;
+    mouse.y=-(e.clientY/window.innerHeight-.5)*2;
+  },{passive:true});
+
+  // PRIMARY WAVE PLANE
+  var SEGS=90,SIZE=100;
+  var wGeo=new THREE.PlaneGeometry(SIZE,SIZE,SEGS,SEGS);
+  wGeo.rotateX(-Math.PI/2.15);
+  var posA=wGeo.attributes.position;
+  var origA=new Float32Array(posA.count);
+  for(var i=0;i<posA.count;i++) origA[i]=posA.getY(i);
+  var wMat=new THREE.MeshBasicMaterial({color:0x00FFD1,wireframe:true,transparent:true,opacity:.042});
+  var wave=new THREE.Mesh(wGeo,wMat);
+  wave.position.set(0,-9,0);scene.add(wave);
+
+  // SECONDARY OFFSET WAVE
+  var wGeo2=new THREE.PlaneGeometry(SIZE,SIZE,45,45);
+  wGeo2.rotateX(-Math.PI/2.15);
+  var posB=wGeo2.attributes.position;
+  var origB=new Float32Array(posB.count);
+  for(var i=0;i<posB.count;i++) origB[i]=posB.getY(i);
+  var wMat2=new THREE.MeshBasicMaterial({color:0x00A88A,transparent:true,opacity:.022,wireframe:true});
+  var wave2=new THREE.Mesh(wGeo2,wMat2);
+  wave2.position.set(0,-11,0);scene.add(wave2);
+
+  // DNA DOUBLE HELIX
+  var hp1=[],hp2=[];
+  for(var i=0;i<320;i++){
+    var t=i/320,ang=t*Math.PI*10,y=(t-.5)*60,r=5;
+    hp1.push(new THREE.Vector3(Math.cos(ang)*r,y,Math.sin(ang)*r-8));
+    hp2.push(new THREE.Vector3(Math.cos(ang+Math.PI)*r,y,Math.sin(ang+Math.PI)*r-8));
+  }
+  var h1=new THREE.Line(new THREE.BufferGeometry().setFromPoints(hp1),new THREE.LineBasicMaterial({color:0x00FFD1,transparent:true,opacity:.13}));
+  var h2=new THREE.Line(new THREE.BufferGeometry().setFromPoints(hp2),new THREE.LineBasicMaterial({color:0x00C9A7,transparent:true,opacity:.09}));
+  var hGroup=new THREE.Group();hGroup.add(h1);hGroup.add(h2);
+  for(var i=0;i<hp1.length;i+=12){
+    var rg=new THREE.BufferGeometry().setFromPoints([hp1[i],hp2[i]]);
+    hGroup.add(new THREE.Line(rg,new THREE.LineBasicMaterial({color:0x00FFD1,transparent:true,opacity:.06})));
+  }
+  hGroup.position.set(22,0,0);scene.add(hGroup);
+
+  // ICOSPHERE WIREFRAMES
+  var orbs=[];
+  [{r:10,p:[-22,4,-18],op:.04},{r:6,p:[20,6,-14],op:.055},{r:14,p:[0,8,-28],op:.025},{r:4,p:[14,-2,-10],op:.07}].forEach(function(d){
+    var m=new THREE.Mesh(new THREE.IcosahedronGeometry(d.r,1),new THREE.MeshBasicMaterial({color:0x00FFD1,wireframe:true,transparent:true,opacity:d.op}));
+    m.position.set(d.p[0],d.p[1],d.p[2]);m.userData={rx:.003+Math.random()*.005,ry:.005+Math.random()*.007};
+    scene.add(m);orbs.push(m);
+  });
+
+  // TORUS RINGS
+  var rings=[];
+  [{r:9,t:.04,p:[-18,2,-16]},{r:5.5,t:.03,p:[18,5,-12]},{r:7,t:.035,p:[4,7,-22]}].forEach(function(d){
+    var m=new THREE.Mesh(new THREE.TorusGeometry(d.r,d.t,8,72),new THREE.MeshBasicMaterial({color:0x00FFD1,transparent:true,opacity:.07}));
+    m.position.set(d.p[0],d.p[1],d.p[2]);m.userData={rx:.002+Math.random()*.005,ry:.004+Math.random()*.005};
+    scene.add(m);rings.push(m);
+  });
+
+  // VORTEX PARTICLES
+  var PC=500,pPos=new Float32Array(PC*3),pTheta=new Float32Array(PC),pR=new Float32Array(PC),pSpd=new Float32Array(PC),pYArr=new Float32Array(PC);
+  for(var k=0;k<PC;k++){
+    pTheta[k]=Math.random()*Math.PI*2;pR[k]=4+Math.random()*28;
+    pYArr[k]=(Math.random()-.5)*50;pSpd[k]=(.002+Math.random()*.004)*(Math.random()>.5?1:-1);
+    pPos[k*3]=Math.cos(pTheta[k])*pR[k];pPos[k*3+1]=pYArr[k];pPos[k*3+2]=Math.sin(pTheta[k])*pR[k];
+  }
+  var pGeo=new THREE.BufferGeometry();
+  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  scene.add(new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x00FFD1,size:.18,transparent:true,opacity:.5})));
+
+  var clock=new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    var t=clock.getElapsedTime();
+    camera.position.x+=(mouse.x*5-camera.position.x)*.022;
+    camera.position.y+=(10+mouse.y*2.5-camera.position.y)*.022;
+    camera.lookAt(0,0,0);
+    // Wave 1
+    for(var i=0;i<posA.count;i++){
+      var x=posA.getX(i),z=posA.getZ(i);
+      posA.setY(i,origA[i]+Math.sin(x*.16+t*.85)*.95+Math.sin(z*.13+t*.7)*.75+Math.sin((x+z)*.08+t*1.05)*.55+Math.sin(Math.sqrt(x*x+z*z)*.14-t*.9)*.65+Math.cos(x*.22-z*.11+t*.6)*.35);
+    }
+    posA.needsUpdate=true;
+    // Wave 2
+    for(var i=0;i<posB.count;i++){
+      var x=posB.getX(i),z=posB.getZ(i);
+      posB.setY(i,origB[i]+Math.sin(x*.2+t*.5+1.2)*.7+Math.sin(z*.16+t*.6+.8)*.5+Math.sin(Math.sqrt(x*x+z*z)*.11-t*.65)*.45);
+    }
+    posB.needsUpdate=true;
+    // Helix
+    hGroup.rotation.y=t*.1;
+    // Orbs + rings
+    orbs.forEach(function(o){o.rotation.x+=o.userData.rx;o.rotation.y+=o.userData.ry;});
+    rings.forEach(function(r){r.rotation.x+=r.userData.rx;r.rotation.y+=r.userData.ry;});
+    // Vortex
+    for(var k=0;k<PC;k++){
+      pTheta[k]+=pSpd[k];pYArr[k]+=.008;
+      if(pYArr[k]>25)pYArr[k]=-25;
+      pPos[k*3]=Math.cos(pTheta[k])*pR[k];pPos[k*3+1]=pYArr[k];pPos[k*3+2]=Math.sin(pTheta[k])*pR[k];
+    }
+    pGeo.attributes.position.needsUpdate=true;
+    renderer.render(scene,camera);
+  }
+  animate();
+  window.addEventListener('resize',function(){
+    camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  });
+})();
+
+
+// ======= UI FUNCTIONS =======
 function scrollToBook(){document.getElementById('book').scrollIntoView({behavior:'smooth'})}
+function scrollToCampaign(){
+  document.getElementById('book').scrollIntoView({behavior:'smooth'});
+  setTimeout(function(){switchTab('campaign',document.querySelector('.tab-btn.tab-campaign'))},400);
+}
 function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
 function toggleFaq(el){el.classList.toggle('open')}
 
+// Hide scroll hint when user actually scrolls iPhone content
+(function(){
+  var hint = document.getElementById('scrollHint');
+  var content = document.querySelector('.iphone-content');
+  if(!hint || !content) return;
+  content.addEventListener('scroll', function(){
+    hint.style.opacity='0';
+    hint.style.transition='opacity .5s ease';
+    setTimeout(function(){ hint.style.display='none'; }, 500);
+  }, {once:true, passive:true});
+})();
+
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-pane').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('tab-'+tab).classList.add('active');
+  var span=document.getElementById('book-hl-span');
+  if(tab==='campaign'){
+    span.textContent='LAUNCH NOW';span.style.color='#ff8030';span.style.textShadow='0 0 60px rgba(255,120,30,.5)';
+  } else {
+    span.textContent='GO VIRAL?';span.style.color='var(--teal)';span.style.textShadow='0 0 60px rgba(0,255,209,.4)';
+  }
+}
+
+function selectBudget(el,val){
+  document.querySelectorAll('.bp').forEach(function(b){b.classList.remove('sel')});
+  el.classList.add('sel');document.getElementById('budgetInput').value=val;
+}
+function togglePchk(el,val){
+  el.classList.toggle('sel');
+  var sel=[];
+  document.querySelectorAll('.pchk.sel .pchk-label').forEach(function(l){
+    var txt=l.textContent.trim();if(txt)sel.push(txt);
+  });
+  document.getElementById('platformsInput').value=sel.join(', ');
+}
+
+
+// Glow orbs parallax on scroll
+(function(){
+  var go1=document.querySelector('.go1'),go2=document.querySelector('.go2');
+  window.addEventListener('scroll',function(){
+    var s=window.scrollY;
+    if(go1)go1.style.transform='translateY('+(s*.15)+'px)';
+    if(go2)go2.style.transform='translateY('+(s*-.1)+'px)';
+  },{passive:true});
+})();
+
+// 3D tilt on cards
+(function(){
+  document.querySelectorAll('.who-card,.cc,.step-card,.brand-card,.clip-type').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var rect=card.getBoundingClientRect();
+      var x=e.clientX-rect.left,y=e.clientY-rect.top;
+      var cx=rect.width/2,cy=rect.height/2;
+      var rotX=-(y-cy)/cy*7;
+      var rotY=(x-cx)/cx*7;
+      card.style.transform='translateY(-12px) rotateX('+rotX+'deg) rotateY('+rotY+'deg)';
+      card.style.transition='transform .1s ease';
+    });
+    card.addEventListener('mouseleave',function(){
+      card.style.transform='';
+      card.style.transition='transform .45s cubic-bezier(.175,.885,.32,1.275)';
+      card.style.backgroundImage='';
+    });
+  });
+})();
+
+// iPhone 17 3D mouse parallax — does NOT block scroll inside screen
+(function(){
+  var wrap=document.getElementById('iphoneWrapper');
+  if(!wrap) return;
+  var baseRotY=-22,baseRotX=8,baseRotZ=1.5;
+  var isInsideScreen=false;
+  var screen=document.querySelector('.iphone-content');
+  if(screen){
+    screen.addEventListener('mouseenter',function(){isInsideScreen=true;});
+    screen.addEventListener('mouseleave',function(){isInsideScreen=false;});
+    screen.addEventListener('wheel',function(e){e.stopPropagation();},{passive:true});
+  }
+  document.addEventListener('mousemove',function(e){
+    if(isInsideScreen) return;
+    var cx=window.innerWidth/2,cy=window.innerHeight/2;
+    var dx=(e.clientX-cx)/cx,dy=(e.clientY-cy)/cy;
+    wrap.style.animation='none';
+    wrap.style.transform='rotateY('+(baseRotY+dx*10)+'deg) rotateX('+(baseRotX-dy*7)+'deg) rotateZ('+baseRotZ+'deg)';
+  });
+  document.addEventListener('mouseleave',function(){
+    wrap.style.animation='float3d 7s ease-in-out infinite';
+    wrap.style.transform='';
+  });
+})();
+
+// Scroll hint hide
+(function(){
+  var hint=document.getElementById('scrollHint');
+  var content=document.querySelector('.iphone-content');
+  if(!hint||!content) return;
+  content.addEventListener('scroll',function(){
+    hint.style.opacity='0';
+    hint.style.transition='opacity .5s';
+    setTimeout(function(){hint.style.display='none';},500);
+  },{once:true,passive:true});
+})();
+
+// Typewriter for proof card — wrapped in DOMContentLoaded
 document.addEventListener('DOMContentLoaded',function(){
-  var form=document.querySelector('.book-form');
-  if(form){
-    form.addEventListener('submit',async function(e){
+  // Typewriter
+  var el=document.getElementById('proofTypewriter');
+  if(el){
+    var phrases=['More proofs available','Verified campaign stats','Real view counts','Ask us anything'];
+    var pi=0,ci=0,deleting=false;
+    function type(){
+      var phrase=phrases[pi];
+      if(!deleting){
+        el.textContent=phrase.substring(0,ci+1);ci++;
+        if(ci===phrase.length){deleting=true;setTimeout(type,1800);return;}
+      } else {
+        el.textContent=phrase.substring(0,ci-1);ci--;
+        if(ci===0){deleting=false;pi=(pi+1)%phrases.length;}
+      }
+      setTimeout(type,deleting?40:70);
+    }
+    setTimeout(type,600);
+  }
+
+  // Rolling stats inside iPhone
+  var items=document.querySelectorAll('.dash-stat-item');
+  if(items.length){
+    var cur=0;
+    setInterval(function(){
+      items[cur].classList.remove('show');
+      cur=(cur+1)%items.length;
+      items[cur].classList.add('show');
+    },2400);
+  }
+
+  // Live view count — badge + bar
+  var lvc=document.getElementById('liveViewerCount');
+  var lbc=document.getElementById('liveBarCount');
+  var lvals=['2.4M','1.8M','3.1M','2.7M','4.2M','1.9M'];
+  var li=0;
+  setInterval(function(){
+    li=(li+1)%lvals.length;
+    if(lvc){
+      lvc.style.opacity='0';lvc.style.transform='translateY(-4px)';
+      setTimeout(function(){lvc.textContent=lvals[li]+'/hr';lvc.style.opacity='1';lvc.style.transform='translateY(0)';lvc.style.transition='all .3s ease';},220);
+    }
+    if(lbc){
+      lbc.style.opacity='0';
+      setTimeout(function(){lbc.textContent=lvals[li];lbc.style.opacity='1';lbc.style.transition='opacity .3s ease';},220);
+    }
+  },2800);
+
+  // Counter animation
+  setTimeout(function(){
+    var cv=document.getElementById('counterVal');
+    if(cv&&!cv._ran){
+      cv._ran=true;
+      var dur=2400,s=performance.now();
+      function tick(now){
+        var p=Math.min((now-s)/dur,1),e=1-Math.pow(1-p,3);
+        cv.textContent=(e>=.995)?'1B+':(e*1).toFixed(1)+'B+';
+        if(p<1)requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+  },500);
+
+  // Form: Schedule a call
+  var callForm=document.getElementById('callForm');
+  if(callForm){
+    callForm.addEventListener('submit',async function(e){
       e.preventDefault();
-      var btn=form.querySelector('button[type="submit"]');
-      btn.textContent='Sending...'; btn.disabled=true;
+      var btn=callForm.querySelector('button[type="submit"]');
+      var orig=btn.innerHTML;btn.textContent='Sending...';btn.disabled=true;
       try{
-        var res=await fetch(form.action,{
-          method:'POST',
-          body:new FormData(form),
-          headers:{'Accept':'application/json'}
-        });
-        if(res.ok){
-          document.getElementById('bookForm').style.display='none';
-          document.getElementById('successMsg').style.display='block';
-        } else {
-          alert('Something went wrong. Please try again.');
-          btn.textContent='Schedule My Call →'; btn.disabled=false;
-        }
-      } catch(err){
-        alert('Network error. Please try again.');
-        btn.textContent='Schedule My Call →'; btn.disabled=false;
+        var res=await fetch(callForm.action,{method:'POST',body:new FormData(callForm),headers:{'Accept':'application/json'}});
+        if(res.ok){document.getElementById('bookForm').style.display='none';document.getElementById('successMsg').style.display='block';}
+        else{alert('Something went wrong. Please try again.');btn.innerHTML=orig;btn.disabled=false;}
+      }catch(err){alert('Network error. Please try again.');btn.innerHTML=orig;btn.disabled=false;}
+    });
+  }
+
+  // Form: Campaign
+  var campForm=document.getElementById('campaignForm');
+  if(campForm){
+    campForm.addEventListener('submit',async function(e){
+      e.preventDefault();
+      var btn=campForm.querySelector('button[type="submit"]');
+      var orig=btn.innerHTML;btn.textContent='Sending...';btn.disabled=true;
+      try{
+        var res=await fetch(campForm.action,{method:'POST',body:new FormData(campForm),headers:{'Accept':'application/json'}});
+        if(res.ok){document.getElementById('campaignFormWrap').style.display='none';document.getElementById('campaignSuccessMsg').style.display='block';}
+        else{alert('Something went wrong. Please try again.');btn.innerHTML=orig;btn.disabled=false;}
+      }catch(err){alert('Network error. Please try again.');btn.innerHTML=orig;btn.disabled=false;}
+    });
+  }
+
+  // Scroll fade-in with 3D reveal
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.style.opacity='1';
+        e.target.style.transform='translateY(0) rotateX(0deg)';
+        io.unobserve(e.target);
       }
     });
-  }
-});
-
-function sendBrief(){
-  var name=document.getElementById('fname').value.trim();
-  var email=document.getElementById('femail').value.trim();
-  var type=document.getElementById('ftype').value;
-  var service=document.getElementById('fservice').value;
-  var cm={music:'Music Label / Artist',tv:'TV Show / Edits',gaming:'Gaming Brand / Studio',brand:'Brand / Business',streamer:'Streamer / Creator'};
-  var sm={clipping:'Clipping',ugc:'UGC Content',both:'Clipping + UGC',logo:'Logo / Brand Assets',unsure:'Not sure yet'};
-  var subj=encodeURIComponent('ReachPoint - Campaign Brief'+(name?' from '+name:''));
-  var body=encodeURIComponent(
-    'Hi ReachPoint,\n\nI would like to submit a campaign brief.\n\n'+
-    '--- CAMPAIGN BRIEF ---\n'+
-    'Name: '+(name||'[Your name]')+'\n'+
-    'Email: '+(email||'[Your email]')+'\n'+
-    'Category: '+(cm[type]||'[e.g. Music Label, Brand, Gaming]')+'\n'+
-    'Service Needed: '+(sm[service]||'[e.g. Clipping, UGC, Logo]')+'\n\n'+
-    'Campaign Goal:\n[Describe your goal]\n\n'+
-    'Budget Range:\n[Your estimated budget]\n\n'+
-    'Additional Notes:\n[Anything else we should know]'
-  );
-  window.location.href='mailto:media@reachpoint.in?subject='+subj+'&body='+body;
-  setTimeout(function(){
-    document.getElementById('bookForm').style.display='none';
-    document.getElementById('successMsg').style.display='block';
-  },600);
-}
-
-function runCounter(){
-  var el=document.getElementById('counterVal');
-  if(!el||el._ran)return; el._ran=true;
-  var dur=2200; var start=performance.now();
-  function tick(now){
-    var p=Math.min((now-start)/dur,1);
-    var ease=1-Math.pow(1-p,3);
-    el.textContent=(ease>=0.995)?'1B+':(ease*1).toFixed(1)+'B+';
-    if(p<1)requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-if(document.readyState!=='loading'){setTimeout(runCounter,400);}
-document.addEventListener('DOMContentLoaded',function(){setTimeout(runCounter,400);});
-window.addEventListener('load',function(){setTimeout(runCounter,300);});
-
-async function submitForm(){
-  var name=document.getElementById('fname').value.trim();
-  var email=document.getElementById('femail').value.trim();
-  var type=document.getElementById('ftype').value;
-  var service=document.getElementById('fservice').value;
-  if(!name||!email||!type){alert('Please fill in your name, email, and category.');return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Please enter a valid email address.');return;}
-  var cm={music:'Music Label / Artist',tv:'TV Show / Edits',gaming:'Gaming Brand / Studio',brand:'Brand / Business',streamer:'Streamer / Creator'};
-  var sm={clipping:'Clipping',ugc:'UGC Content',both:'Clipping + UGC',logo:'Logo / Brand Assets',unsure:'Not sure yet'};
-  var btn=document.querySelector('.submit-btn');
-  btn.textContent='Sending...'; btn.disabled=true;
-  try{
-    var res=await fetch('https://formspree.io/f/mzdjrnay',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({
-        name:name,
-        email:email,
-        category:cm[type]||type,
-        service:sm[service]||'Not specified',
-        _subject:'ReachPoint - Schedule a Call: '+name
-      })
-    });
-    if(res.ok){
-      document.getElementById('bookForm').style.display='none';
-      document.getElementById('successMsg').style.display='block';
-    } else {
-      alert('Something went wrong. Please try again.');
-      btn.textContent='Schedule My Call →'; btn.disabled=false;
-    }
-  } catch(e){
-    alert('Network error. Please try again.');
-    btn.textContent='Schedule My Call →'; btn.disabled=false;
-  }
-}
-
-// Typewriter animation for panel text elements
-var _twQueue = [
-  {id:'tw-services', text:'Clips  UGC'},
-  {id:'tw-clip', text:'✓'},
-  {id:'tw-ugc', text:'✓'},
-  {id:'tw-logos', text:'✓'},
-  {id:'tw-growth', text:'10x'},
-  {id:'tw-plat-lbl', text:'Platforms'},
-  {id:'tw-tiktok', text:'TikTok'},
-  {id:'tw-youtube', text:'YouTube'},
-  {id:'tw-insta', text:'Instagram'},
-  {id:'tw-twitter', text:'X / Twitter'},
-  {id:'tw-fb', text:'Facebook'},
-  {id:'tw-camp-lbl', text:'Recent Campaigns'},
-  {id:'tw-c1', text:'T-Series — Artist Promo'},
-  {id:'tw-c1s', text:'Multi-platform push'},
-  {id:'tw-c2', text:'Balathissecond — Single Release'},
-  {id:'tw-c2s', text:'Do You Feel It? — Single'},
-  {id:'tw-c3', text:'Eromify — Brand Campaign'},
-  {id:'tw-c3s', text:'UGC + Clips'},
-];
-
-function typeWrite(el, text, speed, cb){
-  el.textContent='';
-  var i=0;
-  var t=setInterval(function(){
-    el.textContent+=text[i];
-    i++;
-    if(i>=text.length){clearInterval(t);if(cb)cb();}
-  }, speed);
-}
-
-function runTypewriters(){
-  var delay=300;
-  _twQueue.forEach(function(item){
-    var el=document.getElementById(item.id);
-    if(!el) return;
-    el.textContent='';
-    setTimeout(function(){
-      typeWrite(el, item.text, 18, null);
-    }, delay);
-    delay += Math.max(item.text.length*18+40, 80);
+  },{threshold:0.08});
+  document.querySelectorAll('.step-card,.brand-card,.clip-type,.faq-item,.proof-card,.cc,.stat-item,.who-card').forEach(function(el){
+    el.style.opacity='0';
+    el.style.transform='translateY(32px) rotateX(8deg)';
+    el.style.transition='opacity .6s ease, transform .6s ease';
+    io.observe(el);
   });
-}
-
-window.addEventListener('load', function(){setTimeout(runTypewriters, 200);});
+});
 </script>
 </body>
 </html>
